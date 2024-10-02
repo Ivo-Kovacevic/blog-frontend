@@ -1,10 +1,10 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import {
-    createBrowserRouter,
-    createRoutesFromElements,
-    RouterProvider,
-    Route,
+  createBrowserRouter,
+  createRoutesFromElements,
+  RouterProvider,
+  Route,
 } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
@@ -12,18 +12,20 @@ import User from "./pages/User";
 import Post from "./pages/Post";
 import "./assets/styles/output.css";
 
+const api = "http://localhost:3000";
+
 const router = createBrowserRouter(
-    createRoutesFromElements(
-        <Route path="/" element={<Navbar />}>
-            <Route path="" element={<Home />} />
-            <Route path="user" element={<User />} />
-            <Route path="post" element={<Post />} />
-        </Route>
-    )
+  createRoutesFromElements(
+    <Route path="/" element={<Navbar />}>
+      <Route path="" element={<Home api={api} />} />
+      <Route path="user" element={<User />} />
+      <Route path="post" element={<Post />} />
+    </Route>
+  )
 );
 
 createRoot(document.getElementById("root")).render(
-    <StrictMode>
-        <RouterProvider router={router} />
-    </StrictMode>
+  <StrictMode>
+    <RouterProvider router={router} />
+  </StrictMode>
 );
