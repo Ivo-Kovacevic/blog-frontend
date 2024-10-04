@@ -1,26 +1,35 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import PostSkeleton from "../components/PostSkeleton";
 
 function Post({ api }) {
   const [post, setPost] = useState({});
+  const [error, setError] = useState();
+  const [loading, setLoading] = useState(true);
+  
   const params = useParams();
   const { postId } = params;
   useEffect(() => {
     const fetchPost = async () => {
       try {
         const response = await fetch(`${api}/posts/${postId}`, { mode: "cors" });
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+        if (response.status >= 400) {
+          throw new Error("server error");
         }
         const { post } = await response.json();
         setPost(post);
         console.log(post);
       } catch (error) {
-        console.error(error);
+        setError(error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchPost();
   }, []);
+
+  if (loading) return <PostSkeleton />;
+  if (error) return <p>Error getting getting post.</p>;
 
   return (
     <>
@@ -36,9 +45,7 @@ function Post({ api }) {
             <p>{post.content}</p>
           </div>
         </section>
-        <section>
-            
-        </section>
+        <section></section>
       </article>
     </>
   );
