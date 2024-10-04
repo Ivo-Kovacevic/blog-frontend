@@ -40,13 +40,11 @@ export default function Home({ api }) {
                 className="bg-white p-4 shadow-md shadow-gray-500 border-black border-2 transition-all transform hover:scale-105"
               >
                 <Link className="text-2xl font-bold hover:text-main">{post.title}</Link>
-                <p className="text-gray-700">{post.content}</p>
+                <p className="text-gray-700 line-clamp-3 my-4">{post.content}</p>
                 <div className="flex justify-between items-end text-sm">
                   <div>
                     <h3>Author: {post.authorId}</h3>
-                    <h3>
-                      Comments: <i>unavailable</i>
-                    </h3>
+                    <h3>Comments: {post.comments.length}</h3>
                     <h3>{post.createdAt}</h3>
                   </div>
                   <div>
