@@ -39,7 +39,9 @@ export default function Home({ api }) {
                 key={index}
                 className="bg-white p-4 shadow-md shadow-gray-500 border-black border-2 transition-all transform hover:scale-105"
               >
-                <Link className="text-2xl font-bold hover:text-main">{post.title}</Link>
+                <Link to={`post/${post.id}`} className="text-2xl font-bold hover:text-main">
+                  {post.title}
+                </Link>
                 <p className="text-gray-700 line-clamp-3 my-4">{post.content}</p>
                 <div className="flex justify-between items-end text-sm">
                   <div>

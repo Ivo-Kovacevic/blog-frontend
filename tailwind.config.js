@@ -6,6 +6,9 @@ export default {
       colors: {
         main: "#2356a8",
       },
+      maxWidth: {
+        container: "800px",
+      },
     },
   },
   plugins: [],
