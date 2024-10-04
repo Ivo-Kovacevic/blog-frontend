@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import HomeSkeleton from "../components/HomeSkeleton";
 
 export default function Home({ api }) {
   const [posts, setPosts] = useState([]);
+  const [error, setError] = useState();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -16,10 +19,15 @@ export default function Home({ api }) {
         console.log(posts);
       } catch (error) {
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchPosts();
   }, []);
+
+  if (loading) return <HomeSkeleton />;
+  if (error) return <p>Error getting getting posts.</p>;
 
   return (
     <>
