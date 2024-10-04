@@ -6,7 +6,7 @@ import {
   RouterProvider,
   Route,
 } from "react-router-dom";
-import Navbar from "./components/Navbar";
+import HeaderFooter from "./components/HeaderFooter";
 import Home from "./pages/Home";
 import User from "./pages/User";
 import Post from "./pages/Post";
@@ -16,7 +16,7 @@ const api = "http://localhost:3000";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<Navbar />}>
+    <Route path="/" element={<HeaderFooter />}>
       <Route path="" element={<Home api={api} />} />
       <Route path="user" element={<User />} />
       <Route path="post" element={<Post />} />
