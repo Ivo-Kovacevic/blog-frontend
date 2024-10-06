@@ -6,7 +6,7 @@ function Post({ api }) {
   const [post, setPost] = useState({});
   const [error, setError] = useState();
   const [loading, setLoading] = useState(true);
-  
+
   const params = useParams();
   const { postId } = params;
   useEffect(() => {
@@ -37,7 +37,7 @@ function Post({ api }) {
         <section>
           <div className="my-8">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold">{post.title}</h1>
-            <p>Author: {post.authorId}</p>
+            <p>Author: {post.author.username}</p>
             <p>{post.createdAt}</p>
           </div>
           <hr className="border-2 border-black" />
@@ -45,7 +45,31 @@ function Post({ api }) {
             <p>{post.content}</p>
           </div>
         </section>
-        <section></section>
+        <section>
+          <h2 className="my-4 text-lg">Comments: {post.comments.length}</h2>
+          <form action="/comments" method="post" className="mb-4 flex">
+            <input type="hidden" name="postId" value={post.id} />
+            <textarea
+              className="w-full p-2 border-2 border-black"
+              placeholder="Leave a comment..."
+              rows={2}
+              name="text"
+              id="text"
+            ></textarea>
+            <button className="px-8 py-4 border-2 border-l-0 border-black hover:text-white hover:bg-main hover:border-main">
+              Comment
+            </button>
+          </form>
+          {post.comments.map((comment, index) => (
+            <div key={index} className="mb-4 p-4 border-2 border-black">
+              <h3 className="text-gray-600">
+                By <span className="font-bold text-gray-900">{comment.authorId}</span> |{" "}
+                {comment.createdAt}
+              </h3>
+              <p>{comment.text}</p>
+            </div>
+          ))}
+        </section>
       </article>
     </>
   );

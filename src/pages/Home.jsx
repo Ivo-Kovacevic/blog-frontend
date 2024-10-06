@@ -6,6 +6,7 @@ export default function Home({ api }) {
   const [posts, setPosts] = useState([]);
   const [error, setError] = useState();
   const [loading, setLoading] = useState(true);
+  const [imageLoading, setImageLoading] = useState(true);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -16,17 +17,23 @@ export default function Home({ api }) {
         }
         const { posts } = await response.json();
         setPosts(posts);
-        console.log(posts);
       } catch (error) {
         console.error(error);
       } finally {
         setLoading(false);
       }
     };
+    const loadImage = async () => {
+      const img = new Image();
+      img.src = "images/hero.webp";
+      img.onload = () => setImageLoading(false);
+    };
+
+    loadImage();
     fetchPosts();
   }, []);
 
-  if (loading) return <HomeSkeleton />;
+  if (loading || imageLoading) return <HomeSkeleton />;
   if (error) return <p>Error getting getting posts.</p>;
 
   return (
@@ -37,7 +44,7 @@ export default function Home({ api }) {
             <h1 className="font-bold text-4xl lg:text-6xl">Welcome to my blog!</h1>
           </div>
           <div>
-            <img src="images/hero.webp" alt="" />
+            <img src="images/hero.webp" alt="Hero" />
           </div>
         </section>
         <section className="p-4">
@@ -53,12 +60,14 @@ export default function Home({ api }) {
                 <p className="text-gray-700 line-clamp-3 my-4">{post.content}</p>
                 <div className="flex justify-between items-end text-sm">
                   <div>
-                    <h3>Author: {post.authorId}</h3>
+                    <h3>Author: {post.author.username}</h3>
                     <h3>Comments: {post.comments.length}</h3>
                     <h3>{post.createdAt}</h3>
                   </div>
                   <div>
-                    <Link className="hover:text-main">Read more</Link>
+                    <Link to={`post/${post.id}`} className="hover:text-main">
+                      Read more
+                    </Link>
                   </div>
                 </div>
               </article>
