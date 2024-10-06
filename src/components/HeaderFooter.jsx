@@ -11,7 +11,9 @@ export default function HeaderFooter() {
           <Link to="/" className="text-sm hover:text-main">
             HOME
           </Link>
-          <Link className="text-sm hover:text-main">LOG IN</Link>
+          <Link to="/login" className="text-sm hover:text-main">
+            LOG IN
+          </Link>
         </nav>
       </header>
 

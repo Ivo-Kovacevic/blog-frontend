@@ -47,8 +47,11 @@ function Post({ api }) {
         </section>
         <section>
           <h2 className="my-4 text-lg">Comments: {post.comments.length}</h2>
-          <form action="/comments" method="post" className="mb-4 flex">
-            <input type="hidden" name="postId" value={post.id} />
+          <form
+            action={`/posts/${post.id}/comments`}
+            method="post"
+            className="mb-4 flex shadow-md shadow-gray-500"
+          >
             <textarea
               className="w-full p-2 border-2 border-black"
               placeholder="Leave a comment..."
@@ -56,14 +59,14 @@ function Post({ api }) {
               name="text"
               id="text"
             ></textarea>
-            <button className="px-8 py-4 border-2 border-l-0 border-black hover:text-white hover:bg-main hover:border-main">
+            <button className="px-8 py-4 border-2 border-l-0 border-black transition-all hover:text-white hover:bg-black hover:border-black">
               Comment
             </button>
           </form>
           {post.comments.map((comment, index) => (
-            <div key={index} className="mb-4 p-4 border-2 border-black">
+            <div key={index} className="mb-4 p-4 border-2 border-black shadow-md shadow-gray-500">
               <h3 className="text-gray-600">
-                By <span className="font-bold text-gray-900">{comment.authorId}</span> |{" "}
+                By <span className="font-bold text-gray-900">{comment.author.username}</span> |{" "}
                 {comment.createdAt}
               </h3>
               <p>{comment.text}</p>
