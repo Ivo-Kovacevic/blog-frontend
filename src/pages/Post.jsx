@@ -1,8 +1,11 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import PostSkeleton from "../components/PostSkeleton";
+import { ApiContext } from "../ApiContext";
 
-export default function Post({ api }) {
+export default function Post() {
+  const api = useContext(ApiContext);
+
   const [post, setPost] = useState({});
   const [error, setError] = useState();
   const [loading, setLoading] = useState(true);
@@ -10,6 +13,7 @@ export default function Post({ api }) {
   const [comments, setComments] = useState([]);
   const [editedCommentId, setEditedCommentId] = useState(null);
   const [editedText, setEditedText] = useState("");
+
   const userId = parseInt(localStorage.getItem("userId"));
 
   // Load page

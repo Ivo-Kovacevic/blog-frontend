@@ -1,6 +1,6 @@
 import { Link, Outlet } from "react-router-dom";
 
-export default function HeaderFooter() {
+export default function HeaderFooter({ username }) {
   return (
     <>
       <header className="p-4">
@@ -11,9 +11,13 @@ export default function HeaderFooter() {
           <Link to="/" className="text-sm hover:text-main">
             HOME
           </Link>
-          <Link to="/login" className="text-sm hover:text-main">
-            LOG IN
-          </Link>
+          {username ? (
+            <Link className="text-sm hover:text-main">{username}</Link>
+          ) : (
+            <Link to="/login" className="text-sm hover:text-main">
+              LOG IN
+            </Link>
+          )}
         </nav>
       </header>
 

@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ApiContext } from "../ApiContext";
 
-export default function Login({ api }) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+export default function Login({ setUsername }) {
+  const api = useContext(ApiContext);
+
+  const [loginUsername, setLoginUsername] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -15,7 +18,7 @@ export default function Login({ api }) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username: loginUsername, password: loginPassword }),
       });
       if (!response.ok) {
         throw new Error("Incorrect username or password");
@@ -27,6 +30,7 @@ export default function Login({ api }) {
       localStorage.setItem("userId", userId);
       localStorage.setItem("username", name);
       localStorage.setItem("jwt", token);
+      setUsername(loginUsername);
       return navigate("/");
     } catch (err) {
       console.error("Error:", err);
@@ -50,7 +54,7 @@ export default function Login({ api }) {
               type="text"
               name="username"
               id="username"
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => setLoginUsername(e.target.value)}
               className="p-2 border-2 border-black shadow-md shadow-gray-500"
               required
             />
@@ -62,7 +66,7 @@ export default function Login({ api }) {
               type="password"
               name="password"
               id="password"
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => setLoginPassword(e.target.value)}
               className="p-2 border-2 border-black shadow-md shadow-gray-500"
               required
             />

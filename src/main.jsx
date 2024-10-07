@@ -1,5 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { useState } from "react";
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -13,22 +14,29 @@ import Post from "./pages/Post";
 import Error from "./pages/Error";
 import Login from "./pages/Login";
 import "./assets/styles/output.css";
+import { ApiContext } from "./ApiContext";
 
-const api = "http://localhost:3000";
+export default function App() {
+  const [username, setUsername] = useState(localStorage.getItem("username") || "");
 
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    <Route path="/" element={<HeaderFooter />} errorElement={<Error />}>
-      <Route path="" element={<Home api={api} />} />
-      <Route path="user" element={<User api={api} />} />
-      <Route path="post/:postId" element={<Post api={api} />} />
-      <Route path="login" element={<Login api={api} />} />
-    </Route>
-  )
-);
+  const router = createBrowserRouter(
+    createRoutesFromElements(
+      <Route path="/" element={<HeaderFooter username={username} />} errorElement={<Error />}>
+        <Route path="" element={<Home />} />
+        <Route path="user" element={<User />} />
+        <Route path="post/:postId" element={<Post />} />
+        <Route path="login" element={<Login setUsername={setUsername} />} />
+      </Route>
+    )
+  );
+
+  return <RouterProvider router={router} />;
+}
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <ApiContext.Provider value={"http://localhost:3000"}>
+      <App />
+    </ApiContext.Provider>
   </StrictMode>
 );

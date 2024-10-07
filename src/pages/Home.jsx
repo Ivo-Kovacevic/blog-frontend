@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import HomeSkeleton from "../components/HomeSkeleton";
+import { ApiContext } from "../ApiContext";
 
-export default function Home({ api }) {
+export default function Home() {
+  const api = useContext(ApiContext);
+
   const [posts, setPosts] = useState([]);
   const [error, setError] = useState();
   const [loading, setLoading] = useState(true);
@@ -18,7 +21,7 @@ export default function Home({ api }) {
         const { posts } = await response.json();
         setPosts(posts);
       } catch (error) {
-        console.error(error);
+        setError(error);
       } finally {
         setLoading(false);
       }
