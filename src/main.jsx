@@ -21,7 +21,11 @@ export default function App() {
 
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path="/" element={<HeaderFooter username={username} />} errorElement={<Error />}>
+      <Route
+        path="/"
+        element={<HeaderFooter username={username} setUsername={setUsername} />}
+        errorElement={<Error />}
+      >
         <Route path="" element={<Home />} />
         <Route path="user" element={<User />} />
         <Route path="post/:postId" element={<Post />} />
