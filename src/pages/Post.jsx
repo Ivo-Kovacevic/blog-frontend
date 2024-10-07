@@ -13,6 +13,7 @@ export default function Post() {
   const [comments, setComments] = useState([]);
   const [editedCommentId, setEditedCommentId] = useState(null);
   const [editedText, setEditedText] = useState("");
+  const [forbiddenMessage, setForbiddenMessage] = useState("");
 
   const userId = parseInt(localStorage.getItem("userId"));
 
@@ -52,13 +53,14 @@ export default function Post() {
         body: JSON.stringify({ text: comment }),
       });
       if (!response.ok) {
+        setForbiddenMessage("You must be logged in to comment");
         throw new Error("You must be logged in to comment");
       }
       const newComment = response.json();
       setComments((prevComments) => [...prevComments, newComment]);
       setComment("");
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
@@ -74,6 +76,7 @@ export default function Post() {
         },
       });
       if (!response.ok) {
+        setForbiddenMessage("Can't delete comment");
         throw new Error("Can't delete comment");
       }
       setComments((prevComments) => prevComments.filter((comment) => comment.id !== commentId));
@@ -105,6 +108,7 @@ export default function Post() {
         body: JSON.stringify({ text: editedText }),
       });
       if (!response.ok) {
+        setForbiddenMessage("You must be logged in to edit comment");
         throw new Error("You must be logged in to edit comment");
       }
       const newComment = response.json();
@@ -120,6 +124,16 @@ export default function Post() {
 
   return (
     <>
+      {/* Display message if user tries some action without being logged in */}
+      {forbiddenMessage && (
+        <div
+          onClick={() => setForbiddenMessage("")}
+          className="fixed p-4 left-1/2 -translate-x-1/2 text-white bg-red-700 shadow-md shadow-gray-500 hover:cursor-pointer"
+        >
+          {forbiddenMessage}
+        </div>
+      )}
+
       <article className="mx-auto px-8 max-w-container">
         <section>
           <div className="my-8">
@@ -167,7 +181,7 @@ export default function Post() {
                 {editedCommentId === comment.id ? (
                   <form
                     onSubmit={(e) => handleEditComment(e, comment.id)}
-                    className="edit flex shadow-md shadow-gray-500"
+                    className="edit flex flex-col sm:flex-row shadow-md shadow-gray-500"
                   >
                     <textarea
                       className="w-full p-2 border-2 border-black"
@@ -175,7 +189,7 @@ export default function Post() {
                       onChange={(e) => setEditedText(e.target.value)}
                       rows={2}
                     ></textarea>
-                    <button className="px-8 py-4 border-2 border-l-0 border-black transition-all hover:text-white hover:bg-black hover:border-black">
+                    <button className="px-8 py-4 border-2 border-t-0 sm:border-t-2 sm:border-l-0 border-black transition-all hover:text-white hover:bg-black hover:border-black">
                       Edit
                     </button>
                   </form>

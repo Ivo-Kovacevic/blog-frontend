@@ -11,10 +11,6 @@ export default function HeaderFooter({ username, setUsername }) {
     setUsername("");
   };
 
-  const toggleDropdown = () => {
-    setDropdownOpen(!dropdownOpen);
-  };
-
   return (
     <>
       <header className="p-4">

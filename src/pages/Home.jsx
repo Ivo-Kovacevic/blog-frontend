@@ -42,7 +42,7 @@ export default function Home() {
   return (
     <>
       <main>
-        <section className="flex flex-col md:flex-row justify-around items-center gap-8 p-16">
+        <section className="flex flex-col md:flex-row justify-around items-center gap-8 p-4 sm:p-16">
           <div>
             <h1 className="font-bold text-4xl lg:text-6xl">Welcome to my blog!</h1>
           </div>
