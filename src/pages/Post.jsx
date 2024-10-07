@@ -134,7 +134,7 @@ export default function Post() {
         </div>
       )}
 
-      <article className="mx-auto px-8 max-w-container">
+      <article className="mx-auto px-4 sm:px-8 max-w-container">
         <section>
           <div className="my-8">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold">{post.title}</h1>
@@ -150,7 +150,10 @@ export default function Post() {
           <h2 className="my-4 text-lg">Comments: {post.comments.length}</h2>
 
           {/* Comment form */}
-          <form onSubmit={postComment} className="mb-4 flex shadow-md shadow-gray-500">
+          <form
+            onSubmit={postComment}
+            className="mb-4 flex flex-col sm:flex-row shadow-md shadow-gray-500"
+          >
             <textarea
               className="w-full p-2 border-2 border-black"
               placeholder="Leave a comment..."
@@ -160,7 +163,7 @@ export default function Post() {
               value={comment}
               onChange={(e) => setComment(e.target.value)}
             ></textarea>
-            <button className="px-8 py-4 border-2 border-l-0 border-black transition-all hover:text-white hover:bg-black hover:border-black">
+            <button className="px-8 py-4 border-2 border-t-0 sm:border-t-2 sm:border-l-0 border-black transition-all hover:text-white hover:bg-black hover:border-black">
               Comment
             </button>
           </form>
@@ -169,15 +172,35 @@ export default function Post() {
           {post.comments.map((comment, index) => (
             <div
               key={index}
-              className="flex justify-between mb-4 p-4 border-2 border-black shadow-md shadow-gray-500"
+              className="flex flex-col justify-between mb-4 p-4 border-2 border-black shadow-md shadow-gray-500"
             >
-              <div className="flex-1">
+              {/* Top comment bar */}
+              <div className="flex justify-between flex-1 mb-2">
                 <h3 className="text-gray-600">
                   By <span className="font-bold text-gray-900">{comment.author.username}</span> |{" "}
                   {comment.createdAt}
                 </h3>
+                {/* Edit and delete buttons */}
+                {comment.authorId === userId && (
+                  <div>
+                    <button
+                      className="text-sm px-4 transition-all hover:text-main"
+                      onClick={() => toggleEditForm(comment.id, comment.text)}
+                    >
+                      {editedCommentId === comment.id ? "Cancel" : "Edit"}
+                    </button>
+                    <button
+                      className="text-sm px-4 transition-all hover:text-red-700"
+                      onClick={(e) => deleteComment(comment.id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                )}
+              </div>
 
-                {/* Show comment or form for editing comments */}
+              {/* Show comment or form for editing comments */}
+              <div>
                 {editedCommentId === comment.id ? (
                   <form
                     onSubmit={(e) => handleEditComment(e, comment.id)}
@@ -197,24 +220,6 @@ export default function Post() {
                   <p className="comment">{comment.text}</p>
                 )}
               </div>
-
-              {/* Edit and delete buttons */}
-              {comment.authorId === userId && (
-                <div>
-                  <button
-                    className="text-sm px-4 transition-all hover:text-main"
-                    onClick={() => toggleEditForm(comment.id, comment.text)}
-                  >
-                    {editedCommentId === comment.id ? "Cancel" : "Edit"}
-                  </button>
-                  <button
-                    className="text-sm px-4 transition-all hover:text-red-700"
-                    onClick={(e) => deleteComment(comment.id)}
-                  >
-                    Delete
-                  </button>
-                </div>
-              )}
             </div>
           ))}
         </section>
