@@ -21,7 +21,11 @@ export default function Login({ api }) {
         throw new Error("Incorrect username or password");
       }
       const data = await response.json();
+      const userId = data.userId;
+      const name = data.username;
       const token = data.token;
+      localStorage.setItem("userId", userId);
+      localStorage.setItem("username", name);
       localStorage.setItem("jwt", token);
       return navigate("/");
     } catch (err) {
