@@ -7,7 +7,8 @@ export default function Login({ setUsername }) {
 
   const [loginUsername, setLoginUsername] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
-  const navigate = useNavigate();
+  const [error, setError] = useState("");
+  const navigate = useNavigate("");
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -21,6 +22,7 @@ export default function Login({ setUsername }) {
         body: JSON.stringify({ username: loginUsername, password: loginPassword }),
       });
       if (!response.ok) {
+        setError("Incorrect username or password");
         throw new Error("Incorrect username or password");
       }
       const data = await response.json();
@@ -39,6 +41,16 @@ export default function Login({ setUsername }) {
 
   return (
     <>
+      {/* Display message if user tries some action without being logged in */}
+      {error && (
+        <div
+          onClick={() => setError("")}
+          className="fixed p-4 left-1/2 -translate-x-1/2 text-white bg-red-700 shadow-md shadow-gray-500 hover:cursor-pointer"
+        >
+          {error}
+        </div>
+      )}
+
       <div className="container mx-auto px-4">
         <div className="my-6 sm:my-16 flex justify-center">
           <form
