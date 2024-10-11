@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { ApiContext } from "../ApiContext";
 import CommentsSkeleton from "./CommentsSkeleton";
@@ -13,6 +13,24 @@ export default function PostComments({ setForbiddenMessage }) {
   const [comment, setComment] = useState("");
   const [editedText, setEditedText] = useState("");
   const [editedCommentId, setEditedCommentId] = useState(null);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+
+  const observer = useRef();
+  const lastCommentElement = useCallback(
+    (element) => {
+      if (loading) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setLoading(true);
+          setPage((prevPage) => prevPage + 1);
+        }
+      });
+      if (element) observer.current.observe(element);
+    },
+    [loading, hasMore]
+  );
 
   const userId = parseInt(localStorage.getItem("userId"));
 
@@ -22,14 +40,19 @@ export default function PostComments({ setForbiddenMessage }) {
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const response = await fetch(`${api}/posts/${postId}/comments`, {
+        const response = await fetch(`${api}/posts/${postId}/comments?page=${page}&limit=5`, {
           mode: "cors",
         });
         if (!response.ok) {
           throw new Error("Error");
         }
-        const { comments } = await response.json();
-        setComments(comments);
+        const { comments, hasMore } = await response.json();
+        setComments((prevComments) => {
+          const existingCommentsIds = new Set(prevComments.map((comment) => comment.id));
+          const uniqueComments = comments.filter((comment) => !existingCommentsIds.has(comment.id));
+          return [...prevComments, ...uniqueComments];
+        });
+        setHasMore(hasMore);
       } catch (error) {
         console.error(error);
         setError(error);
@@ -38,7 +61,7 @@ export default function PostComments({ setForbiddenMessage }) {
       }
     };
     fetchComments();
-  }, []);
+  }, [page]);
 
   // Add new comment on submit
   const postComment = async (e) => {
@@ -125,7 +148,6 @@ export default function PostComments({ setForbiddenMessage }) {
     }
   };
 
-  if (loading) return <CommentsSkeleton />;
   if (error) return <p>Error getting getting post.</p>;
 
   return (
@@ -154,9 +176,10 @@ export default function PostComments({ setForbiddenMessage }) {
       {/* Rest of the comments */}
       {comments.map((comment, index) => (
         <div
-          key={index}
+          key={comment.id}
           className="flex flex-col justify-between mb-4 p-4 border-2 border-black shadow-md shadow-gray-500"
         >
+          {comments.length === index + 1 && <div ref={lastCommentElement}></div>}
           {/* Top comment bar */}
           <div className="flex justify-between flex-1 mb-2">
             <h3 className="text-gray-600">
@@ -211,6 +234,7 @@ export default function PostComments({ setForbiddenMessage }) {
           </div>
         </div>
       ))}
+      {loading && hasMore && <CommentsSkeleton />}
     </>
   );
 }
