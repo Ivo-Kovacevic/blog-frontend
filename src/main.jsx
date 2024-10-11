@@ -27,7 +27,7 @@ export default function App() {
         errorElement={<Error />}
       >
         <Route path="" element={<Home />} />
-        <Route path="user" element={<User />} />
+        <Route path="user/:userId" element={<User />} />
         <Route path="post/:postId" element={<Post />} />
         <Route path="login" element={<Login setUsername={setUsername} />} />
       </Route>
