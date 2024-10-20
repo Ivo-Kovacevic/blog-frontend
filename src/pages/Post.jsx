@@ -37,17 +37,25 @@ export default function Post() {
   if (loading) return <PostSkeleton />;
   if (error) return <p className="container mx-auto text-red-700">Error getting post.</p>;
 
+  const renderContent = (content) => {
+    return content.split("\n").map((line, index) => (
+      <p key={index} className="mb-4">
+        {line}
+      </p>
+    ));
+  };
+
   return (
     <>
       {/* Display message if user tries some action without being logged in */}
-      {forbiddenMessage && (
-        <div
-          onClick={() => setForbiddenMessage("")}
-          className="fixed p-4 left-1/2 -translate-x-1/2 text-white bg-red-700 shadow-md shadow-gray-500 hover:cursor-pointer"
-        >
-          {forbiddenMessage}
-        </div>
-      )}
+      <div
+        onClick={() => setForbiddenMessage("")}
+        className={`fixed p-4 left-1/2 -translate-x-1/2 -top-12 transition ease-out duration-300 text-white bg-red-700 shadow-md shadow-gray-500 hover:cursor-pointer w-max ${
+          forbiddenMessage && "translate-y-24"
+        }`}
+      >
+        {forbiddenMessage}
+      </div>
 
       <article className="mx-auto px-4 sm:px-8 max-w-container">
         <section>
@@ -57,9 +65,7 @@ export default function Post() {
             <p>{post.createdAt}</p>
           </div>
           <hr className="border-2 border-black" />
-          <div className="my-8">
-            <p>{post.content}</p>
-          </div>
+          <div className="my-8">{renderContent(post.content)}</div>
         </section>
         <section>
           <PostComments setForbiddenMessage={setForbiddenMessage} />
