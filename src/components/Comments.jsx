@@ -4,7 +4,7 @@ import { ApiContext } from "../ApiContext";
 import CommentsSkeleton from "./CommentsSkeleton";
 import PropTypes from "prop-types";
 
-export default function PostComments({ setForbiddenMessage }) {
+export default function Comments({ resource, resourceId, setForbiddenMessage }) {
   const api = useContext(ApiContext);
 
   const [comments, setComments] = useState([]);
@@ -35,14 +35,17 @@ export default function PostComments({ setForbiddenMessage }) {
   const userId = parseInt(localStorage.getItem("userId"));
 
   // Load Comments
-  const params = useParams();
-  const { postId } = params;
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const response = await fetch(`${api}/posts/${postId}/comments?page=${page}&limit=5`, {
-          mode: "cors",
-        });
+        const response = await fetch(
+          `${api}/${resource}/${resourceId}/comments?page=${page}&limit=5`,
+          {
+            mode: "cors",
+          }
+        );
+        console.log(resource);
+
         if (!response.ok) {
           throw new Error("Error");
         }
@@ -68,7 +71,7 @@ export default function PostComments({ setForbiddenMessage }) {
     e.preventDefault();
     const token = localStorage.getItem("jwt");
     try {
-      const response = await fetch(`${api}/posts/${postId}/comments`, {
+      const response = await fetch(`${api}/${resource}/${resourceId}/comments`, {
         mode: "cors",
         method: "POST",
         headers: {
@@ -92,7 +95,7 @@ export default function PostComments({ setForbiddenMessage }) {
   const deleteComment = async (commentId) => {
     const token = localStorage.getItem("jwt");
     try {
-      const response = await fetch(`${api}/posts/${postId}/comments/${commentId}`, {
+      const response = await fetch(`${api}/${resource}/${resourceId}/comments/${commentId}`, {
         mode: "cors",
         method: "DELETE",
         headers: {
@@ -123,7 +126,7 @@ export default function PostComments({ setForbiddenMessage }) {
     e.preventDefault();
     const token = localStorage.getItem("jwt");
     try {
-      const response = await fetch(`${api}/posts/${postId}/comments/${commentId}`, {
+      const response = await fetch(`${api}/${resource}/${resourceId}/comments/${commentId}`, {
         mode: "cors",
         method: "PUT",
         headers: {
@@ -155,23 +158,25 @@ export default function PostComments({ setForbiddenMessage }) {
       <h2 className="my-4 text-lg">Comments: {comments.length}</h2>
 
       {/* Comment form */}
-      <form
-        onSubmit={postComment}
-        className="mb-4 flex flex-col sm:flex-row shadow-md shadow-gray-500"
-      >
-        <textarea
-          className="w-full p-2 border-2 border-black"
-          placeholder="Leave a comment..."
-          rows={2}
-          name="text"
-          id="text"
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-        ></textarea>
-        <button className="px-8 py-4 border-2 border-t-0 sm:border-t-2 sm:border-l-0 border-black transition-all hover:text-white hover:bg-black hover:border-black">
-          Comment
-        </button>
-      </form>
+      {resource === "posts" && (
+        <form
+          onSubmit={postComment}
+          className="mb-4 flex flex-col sm:flex-row shadow-md shadow-gray-500"
+        >
+          <textarea
+            className="w-full p-2 border-2 border-black"
+            placeholder="Leave a comment..."
+            rows={2}
+            name="text"
+            id="text"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+          ></textarea>
+          <button className="px-8 py-4 border-2 border-t-0 sm:border-t-2 sm:border-l-0 border-black transition-all hover:text-white hover:bg-black hover:border-black">
+            Comment
+          </button>
+        </form>
+      )}
 
       {/* Rest of the comments */}
       {comments.map((comment, index) => (
@@ -239,6 +244,7 @@ export default function PostComments({ setForbiddenMessage }) {
   );
 }
 
-PostComments.propTypes = {
+Comments.propTypes = {
+  resource: PropTypes.string,
   setForbiddenMessage: PropTypes.func.isRequired,
 };

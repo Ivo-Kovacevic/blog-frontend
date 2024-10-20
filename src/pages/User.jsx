@@ -1,16 +1,18 @@
 import { useContext, useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { ApiContext } from "../ApiContext";
+import Comments from "../components/Comments";
 
 export default function User() {
   const api = useContext(ApiContext);
 
   const [user, setUser] = useState({});
   const [error, setError] = useState();
+  const [forbiddenMessage, setForbiddenMessage] = useState("");
 
   const params = useParams();
+  const { userId } = params;
   useEffect(() => {
-    const { userId } = params;
     const fetchUser = async () => {
       try {
         const response = await fetch(`${api}/users/${userId}`, { mode: "cors" });
@@ -26,9 +28,24 @@ export default function User() {
     };
     fetchUser();
   }, []);
+
   return (
     <>
-      <div>THIS IS USER</div>
+      <div className="mx-auto px-4 sm:px-8 max-w-container">
+        <section>
+          <h1 className="text-xl">
+            <span className="text-gray-500">User:</span>{" "}
+            <span className="font-bold">{user.username}</span>
+          </h1>
+        </section>
+        <section>
+          <Comments
+            resource={"users"}
+            resourceId={userId}
+            setForbiddenMessage={setForbiddenMessage}
+          />
+        </section>
+      </div>
     </>
   );
 }

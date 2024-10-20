@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import PostSkeleton from "../components/PostSkeleton";
 import { ApiContext } from "../ApiContext";
-import PostComments from "../components/PostComments";
+import Comments from "../components/Comments";
 
 export default function Post() {
   const api = useContext(ApiContext);
@@ -14,8 +14,8 @@ export default function Post() {
 
   // Load Post
   const params = useParams();
+  const { postId } = params;
   useEffect(() => {
-    const { postId } = params;
     const fetchPost = async () => {
       try {
         const response = await fetch(`${api}/posts/${postId}`, { mode: "cors" });
@@ -68,7 +68,11 @@ export default function Post() {
           <div className="my-8">{renderContent(post.content)}</div>
         </section>
         <section>
-          <PostComments setForbiddenMessage={setForbiddenMessage} />
+          <Comments
+            resource="posts"
+            resourceId={postId}
+            setForbiddenMessage={setForbiddenMessage}
+          />
         </section>
       </article>
     </>

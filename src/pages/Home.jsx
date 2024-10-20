@@ -51,7 +51,7 @@ export default function Home() {
           </div>
         </section>
         <section className="p-4">
-          <div className="container mx-auto grid gap-4 grid-cols-[repeat(auto-fill,minmax(20rem,1fr))] items-start">
+          <div className="container mx-auto grid gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 items-start">
             {posts.map((post, index) => (
               <article
                 key={index}
