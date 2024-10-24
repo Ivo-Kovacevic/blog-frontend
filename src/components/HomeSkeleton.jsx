@@ -13,7 +13,7 @@ export default function HomeSkeleton() {
         </section>
         <section className="p-4">
           <div className="container mx-auto grid gap-4 grid-cols-[repeat(auto-fill,minmax(20rem,1fr))] items-start">
-            {Array.from({ length: 6 }, (_, index) => (
+            {Array.from({ length: 8 }, (_, index) => (
               <article key={index} className="bg-gray-400 p-4 animate-pulse rounded">
                 <div className="mb-1 h-6 w-full bg-gray-300 animate-pulse rounded"></div>
                 <div className="mb-4 h-6 w-3/4 bg-gray-300 animate-pulse rounded"></div>

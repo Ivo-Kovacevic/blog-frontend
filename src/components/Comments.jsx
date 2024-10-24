@@ -246,5 +246,6 @@ export default function Comments({ resource, resourceId, setForbiddenMessage }) 
 
 Comments.propTypes = {
   resource: PropTypes.string,
+  resourceId: PropTypes.number,
   setForbiddenMessage: PropTypes.func.isRequired,
 };

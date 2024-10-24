@@ -39,7 +39,7 @@ export default function App() {
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <ApiContext.Provider value={"http://localhost:3000"}>
+    <ApiContext.Provider value={"https://apiblog.up.railway.app"}>
       <App />
     </ApiContext.Provider>
   </StrictMode>
