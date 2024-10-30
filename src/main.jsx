@@ -13,6 +13,7 @@ import User from "./pages/User";
 import Post from "./pages/Post";
 import Error from "./pages/Error";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 import "./assets/styles/output.css";
 import { ApiContext } from "./ApiContext";
 
@@ -30,6 +31,7 @@ export default function App() {
         <Route path="user/:userId" element={<User />} />
         <Route path="post/:postId" element={<Post />} />
         <Route path="login" element={<Login setUsername={setUsername} />} />
+        <Route path="register" element={<Register setUsername={setUsername} />} />
       </Route>
     )
   );

@@ -52,7 +52,7 @@ export default function Login({ setUsername }) {
       )}
 
       <div className="container mx-auto px-4">
-        <div className="my-6 sm:my-16 flex justify-center">
+        <div className="my-6 sm:my-10 flex justify-center">
           <form
             onSubmit={handleLogin}
             className="shadow-md shadow-gray-500 p-8 border-2 border-black flex flex-col text-center"
