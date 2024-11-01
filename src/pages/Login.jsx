@@ -42,14 +42,14 @@ export default function Login({ setUsername }) {
   return (
     <>
       {/* Display message if user tries some action without being logged in */}
-      {error && (
-        <div
+      <div
           onClick={() => setError("")}
-          className="fixed p-4 left-1/2 -translate-x-1/2 text-white bg-red-700 shadow-md shadow-gray-500 hover:cursor-pointer"
+          className={`fixed p-4 left-1/2 -translate-x-1/2 -top-12 transition ease-out duration-300 text-white bg-red-700 shadow-md shadow-gray-500 hover:cursor-pointer w-max ${
+            error.length > 0 && "translate-y-24"
+        }`}
         >
           {error}
-        </div>
-      )}
+      </div>
 
       <div className="container mx-auto px-4">
         <div className="my-6 sm:my-10 flex justify-center">
