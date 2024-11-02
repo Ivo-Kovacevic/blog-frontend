@@ -41,7 +41,7 @@ export default function App() {
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <ApiContext.Provider value={"http://localhost:3000"}>
+    <ApiContext.Provider value={import.meta.env.VITE_API_URL}>
       <App />
     </ApiContext.Provider>
   </StrictMode>
