@@ -65,7 +65,7 @@ export default function Post() {
             <p>{post.createdAt}</p>
           </div>
           <hr className="border-2 border-black" />
-          <div className="my-8">{renderContent(post.content)}</div>
+          <div className="my-8">{renderContent(post.text)}</div>
         </section>
         <section>
           <Comments
