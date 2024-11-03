@@ -25,7 +25,7 @@ export default function HeaderFooter({ username, setUsername }) {
             <div className="relative group">
               <button className="text-sm hover:text-main">{username}</button>
               <div className="flex flex-col absolute -right-1/2 bg-white border shadow-lg z-10 opacity-0 w-max group-hover:opacity-100 transform scale-95 group-hover:scale-100 transition-all duration-200">
-                <Link className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                <Link to={`/user/${localStorage.getItem("userId")}`} className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                   View Profile
                 </Link>
                 <button
