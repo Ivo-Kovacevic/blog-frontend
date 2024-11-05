@@ -155,8 +155,6 @@ export default function Comments({ resource, resourceId, setForbiddenMessage }) 
 
   return (
     <>
-      <h2 className="my-4 text-lg">Comments: {comments.length}</h2>
-
       {/* Comment form */}
       {resource === "posts" && (
         <form

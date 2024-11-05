@@ -37,7 +37,7 @@ export default function Post() {
   if (loading) return <PostSkeleton />;
   if (error) return <p className="container mx-auto text-red-700">Error getting post.</p>;
 
-  const renderContent = (content) => {
+  const renderText = (content) => {
     return content.split("\n").map((line, index) => (
       <p key={index} className="mb-4">
         {line}
@@ -61,13 +61,22 @@ export default function Post() {
         <section>
           <div className="my-8">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold">{post.title}</h1>
-            <p>Author: {post.author.username}</p>
+            <h3 className="text-gray-600">
+              By{" "}
+              <Link
+                to={`/user/${post.author.id}`}
+                className="font-bold text-gray-900 hover:underline"
+              >
+                {post.author.username}
+              </Link>
+            </h3>
             <p>{post.createdAt}</p>
           </div>
           <hr className="border-2 border-black" />
-          <div className="my-8">{renderContent(post.text)}</div>
+          <div className="my-8">{renderText(post.text)}</div>
         </section>
         <section>
+          <h2 className="my-4 text-lg">Comments: {post._count.comments}</h2>
           <Comments
             resource="posts"
             resourceId={postId}
