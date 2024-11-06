@@ -10,6 +10,10 @@ export default function User() {
   const [error, setError] = useState();
   const [forbiddenMessage, setForbiddenMessage] = useState("");
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const params = useParams();
   const { userId } = params;
   useEffect(() => {

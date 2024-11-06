@@ -29,6 +29,10 @@ export default function Posts() {
   );
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
     const fetchPosts = async () => {
       try {
         const response = await fetch(`${api}/posts?page=${page}&limit=10`, { mode: "cors" });
