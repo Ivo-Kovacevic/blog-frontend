@@ -4,10 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite & tailwindcss -i ./src/assets/styles/input.css -o ./src/assets/styles/output.css --watch",
     "host": "vite --host",
     "build": "vite build",
-    "tailwindcss": "npx tailwindcss -i ./src/assets/styles/input.css -o ./src/assets/styles/output.css --watch",
     "lint": "eslint .",
     "preview": "vite preview"
   },

@@ -2,6 +2,7 @@ import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ApiContext } from "../ApiContext";
 import PostsSkeleton from "./PostsSkeleton";
+import Error from "./Error";
 
 export default function Posts() {
   const api = useContext(ApiContext);
@@ -56,7 +57,7 @@ export default function Posts() {
     fetchPosts();
   }, [page]);
 
-  if (error) return <p>Error getting getting posts.</p>;
+  if (error) return <Error resource={"posts"}/>;
 
   return (
     <>

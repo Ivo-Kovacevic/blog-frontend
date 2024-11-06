@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import PostSkeleton from "../components/PostSkeleton";
 import { ApiContext } from "../ApiContext";
 import Comments from "../components/Comments";
+import Error from "../components/Error";
 
 export default function Post() {
   const api = useContext(ApiContext);
@@ -35,7 +36,7 @@ export default function Post() {
   }, []);
 
   if (loading) return <PostSkeleton />;
-  if (error) return <p className="container mx-auto text-red-700">Error getting post.</p>;
+  if (error) return <Error resource={"post"}/>;
 
   const renderText = (content) => {
     return content.split("\n").map((line, index) => (

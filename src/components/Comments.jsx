@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { ApiContext } from "../ApiContext";
 import CommentsSkeleton from "./CommentsSkeleton";
 import PropTypes from "prop-types";
+import Error from "./Error";
 
 export default function Comments({ resource, resourceId, setForbiddenMessage }) {
   const api = useContext(ApiContext);
@@ -149,7 +150,7 @@ export default function Comments({ resource, resourceId, setForbiddenMessage }) 
     }
   };
 
-  if (error) return <p>Error getting getting post.</p>;
+  if (error) return <Error resource={"comments"} />;
 
   return (
     <>
