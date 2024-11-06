@@ -44,10 +44,8 @@ export default function Comments({ resource, resourceId, setForbiddenMessage }) 
             mode: "cors",
           }
         );
-        console.log(resource);
-
         if (!response.ok) {
-          throw new Error("Error");
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
         const { comments, hasMore } = await response.json();
         setComments((prevComments) => {
@@ -183,6 +181,7 @@ export default function Comments({ resource, resourceId, setForbiddenMessage }) 
           className="flex flex-col justify-between mb-4 p-4 border-2 border-black shadow-md shadow-gray-500"
         >
           {comments.length === index + 1 && <div ref={lastCommentElement}></div>}
+
           {/* Top comment bar */}
           <div className="flex justify-between flex-1 mb-2">
             <h3 className="text-gray-600">
@@ -195,6 +194,7 @@ export default function Comments({ resource, resourceId, setForbiddenMessage }) 
               </Link>{" "}
               | {comment.createdAt}
             </h3>
+
             {/* Edit and delete buttons */}
             {comment.authorId === userId && (
               <div>
