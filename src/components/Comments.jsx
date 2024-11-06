@@ -4,6 +4,7 @@ import { ApiContext } from "../ApiContext";
 import CommentsSkeleton from "./CommentsSkeleton";
 import PropTypes from "prop-types";
 import Error from "./Error";
+import apiCall from "../api/apiCall";
 
 export default function Comments({ resource, resourceId, setForbiddenMessage }) {
   const api = useContext(ApiContext);
@@ -39,11 +40,9 @@ export default function Comments({ resource, resourceId, setForbiddenMessage }) 
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const response = await fetch(
+        const response = await apiCall(
           `${api}/${resource}/${resourceId}/comments?page=${page}&limit=5`,
-          {
-            mode: "cors",
-          }
+          "GET"
         );
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -68,16 +67,9 @@ export default function Comments({ resource, resourceId, setForbiddenMessage }) 
   // Add new comment on submit
   const postComment = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem("jwt");
     try {
-      const response = await fetch(`${api}/${resource}/${resourceId}/comments`, {
-        mode: "cors",
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ text: comment }),
+      const response = await apiCall(`${api}/${resource}/${resourceId}/comments`, "POST", {
+        text: comment,
       });
       if (!response.ok) {
         setForbiddenMessage("You must be logged in to comment");
@@ -92,16 +84,11 @@ export default function Comments({ resource, resourceId, setForbiddenMessage }) 
   };
 
   const deleteComment = async (commentId) => {
-    const token = localStorage.getItem("jwt");
     try {
-      const response = await fetch(`${api}/${resource}/${resourceId}/comments/${commentId}`, {
-        mode: "cors",
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await apiCall(
+        `${api}/${resource}/${resourceId}/comments/${commentId}`,
+        "DELETE"
+      );
       if (!response.ok) {
         setForbiddenMessage("Can't delete comment");
         throw new Error("Can't delete comment");
@@ -123,17 +110,14 @@ export default function Comments({ resource, resourceId, setForbiddenMessage }) 
 
   const handleEditComment = async (e, commentId) => {
     e.preventDefault();
-    const token = localStorage.getItem("jwt");
     try {
-      const response = await fetch(`${api}/${resource}/${resourceId}/comments/${commentId}`, {
-        mode: "cors",
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ text: editedText }),
-      });
+      const response = await apiCall(
+        `${api}/${resource}/${resourceId}/comments/${commentId}`,
+        "PUT",
+        {
+          text: editedText,
+        }
+      );
       if (!response.ok) {
         setForbiddenMessage("You must be logged in to edit comment");
         throw new Error("You must be logged in to edit comment");

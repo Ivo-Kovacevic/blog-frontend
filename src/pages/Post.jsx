@@ -4,6 +4,7 @@ import PostSkeleton from "../components/PostSkeleton";
 import { ApiContext } from "../ApiContext";
 import Comments from "../components/Comments";
 import Error from "../components/Error";
+import apiCall from "../api/apiCall";
 
 export default function Post() {
   const api = useContext(ApiContext);
@@ -19,7 +20,7 @@ export default function Post() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await fetch(`${api}/posts/${postId}`, { mode: "cors" });
+        const response = await apiCall(`${api}/posts/${postId}`);
         if (response.status >= 400) {
           throw new Error("Error");
         }
@@ -36,7 +37,7 @@ export default function Post() {
   }, []);
 
   if (loading) return <PostSkeleton />;
-  if (error) return <Error resource={"post"}/>;
+  if (error) return <Error resource={"post"} />;
 
   const renderText = (content) => {
     return content.split("\n").map((line, index) => (

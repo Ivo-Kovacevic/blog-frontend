@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ApiContext } from "../ApiContext";
 import PostsSkeleton from "./PostsSkeleton";
 import Error from "./Error";
+import apiCall from "../api/apiCall";
 
 export default function Posts() {
   const api = useContext(ApiContext);
@@ -36,7 +37,7 @@ export default function Posts() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await fetch(`${api}/posts?page=${page}&limit=10`, { mode: "cors" });
+        const response = await apiCall(`${api}/posts?page=${page}&limit=10`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -57,7 +58,7 @@ export default function Posts() {
     fetchPosts();
   }, [page]);
 
-  if (error) return <Error resource={"posts"}/>;
+  if (error) return <Error resource={"posts"} />;
 
   return (
     <>

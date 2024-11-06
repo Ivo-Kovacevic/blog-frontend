@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { ApiContext } from "../ApiContext";
 import Comments from "../components/Comments";
 import Error from "../components/Error";
+import apiCall from "../api/apiCall";
 
 export default function User() {
   const api = useContext(ApiContext);
@@ -20,13 +21,12 @@ export default function User() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch(`${api}/users/${userId}`, { mode: "cors" });
+        const response = await apiCall(`${api}/users/${userId}`);
         if (response.status >= 400) {
           throw new Error("server error");
         }
         const user = await response.json();
         setUser(user);
-        console.log(user);
       } catch (error) {
         setError(error);
       }
