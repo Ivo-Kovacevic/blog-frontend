@@ -8,9 +8,9 @@ export default function CommentsSkeleton() {
         >
           {/* Top comment bar */}
           <div className="flex gap-4">
-            <div className="min-w-20 sm:min-w-36 h-4 bg-gray-400 animate-pulse rounded"></div>
-            <div className="min-w-20 sm:min-w-36 h-4 bg-gray-400 animate-pulse rounded"></div>
-            <div className="ml-auto min-w-20 sm:min-w-36 h-4 bg-gray-400 animate-pulse rounded"></div>
+            <div className="w-1/4 h-4 bg-gray-400 animate-pulse rounded"></div>
+            <div className="w-1/4 h-4 bg-gray-400 animate-pulse rounded"></div>
+            <div className="ml-auto w-1/4 h-4 bg-gray-400 animate-pulse rounded"></div>
           </div>
           {/* Comment text */}
           <div>
