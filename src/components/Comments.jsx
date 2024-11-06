@@ -1,10 +1,10 @@
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ApiContext } from "../ApiContext";
-import CommentsSkeleton from "./CommentsSkeleton";
 import PropTypes from "prop-types";
-import Error from "./Error";
 import apiCall from "../api/apiCall";
+import CommentsSkeleton from "./CommentsSkeleton";
+import Error from "./Error";
 
 export default function Comments({ resource, resourceId, setForbiddenMessage }) {
   const api = useContext(ApiContext);

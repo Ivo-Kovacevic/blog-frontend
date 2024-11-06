@@ -1,10 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import PostSkeleton from "../components/PostSkeleton";
 import { ApiContext } from "../ApiContext";
-import Comments from "../components/Comments";
-import Error from "../components/Error";
 import apiCall from "../api/apiCall";
+import Comments from "../components/Comments";
+import PostSkeleton from "../components/PostSkeleton";
+import CommentsSkeleton from "../components/CommentsSkeleton";
+import Error from "../components/Error";
 
 export default function Post() {
   const api = useContext(ApiContext);
@@ -36,7 +37,6 @@ export default function Post() {
     fetchPost();
   }, []);
 
-  if (loading) return <PostSkeleton />;
   if (error) return <Error resource={"post"} />;
 
   const renderText = (content) => {
@@ -60,30 +60,40 @@ export default function Post() {
       </div>
 
       <article className="mx-auto px-4 sm:px-8 max-w-container">
+        {loading ? (
+          <PostSkeleton />
+        ) : (
+          <section>
+            <div className="my-8">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold">{post.title}</h1>
+              <h3 className="text-gray-600">
+                By{" "}
+                <Link
+                  to={`/user/${post.author.id}`}
+                  className="font-bold text-gray-900 hover:underline"
+                >
+                  {post.author.username}
+                </Link>
+              </h3>
+              <p>{post.createdAt}</p>
+            </div>
+            <hr className="border-2 border-black" />
+            <div className="my-8">{renderText(post.text)}</div>
+          </section>
+        )}
         <section>
-          <div className="my-8">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold">{post.title}</h1>
-            <h3 className="text-gray-600">
-              By{" "}
-              <Link
-                to={`/user/${post.author.id}`}
-                className="font-bold text-gray-900 hover:underline"
-              >
-                {post.author.username}
-              </Link>
-            </h3>
-            <p>{post.createdAt}</p>
-          </div>
-          <hr className="border-2 border-black" />
-          <div className="my-8">{renderText(post.text)}</div>
-        </section>
-        <section>
-          <h2 className="my-4 text-lg">Comments: {post._count.comments}</h2>
-          <Comments
-            resource="posts"
-            resourceId={postId}
-            setForbiddenMessage={setForbiddenMessage}
-          />
+          {loading ? (
+            <CommentsSkeleton />
+          ) : (
+            <>
+              <h2 className="my-4 text-lg">Comments: {post._count.comments}</h2>
+              <Comments
+                resource="posts"
+                resourceId={parseInt(postId)}
+                setForbiddenMessage={setForbiddenMessage}
+              />
+            </>
+          )}
         </section>
       </article>
     </>

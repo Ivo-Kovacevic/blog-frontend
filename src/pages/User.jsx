@@ -58,9 +58,10 @@ export default function User() {
           </h2>
         </section>
         <section>
+          
           <Comments
             resource={"users"}
-            resourceId={userId}
+            resourceId={parseInt(userId)}
             setForbiddenMessage={setForbiddenMessage}
           />
         </section>
