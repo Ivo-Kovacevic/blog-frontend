@@ -64,8 +64,18 @@ export default function Home() {
                 <p className="text-gray-700 line-clamp-3 my-4">{post.text}</p>
                 <div className="flex justify-between items-end text-sm">
                   <div>
-                    <h3>Author: {post.author.username}</h3>
-                    <h3>Comments: {post._count.comments}</h3>
+                    <h3>
+                      Author:{" "}
+                      <Link
+                        to={`/user/${post.authorId}`}
+                        className="font-bold text-gray-900 hover:underline"
+                      >
+                        {post.author.username}
+                      </Link>
+                    </h3>
+                    <h3>
+                      Comments: <span className="font-bold text-gray-900">{post._count.comments}</span>
+                    </h3>
                     <h3>{post.createdAt}</h3>
                   </div>
                   <div>
