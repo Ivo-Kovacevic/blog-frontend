@@ -40,7 +40,12 @@ export default function Posts() {
         const { posts, hasMore } = await response.json();
         setPosts((prevPosts) => {
           const existingPostsIds = new Set(prevPosts.map((post) => post.id));
-          const uniquePosts = posts.filter((post) => !existingPostsIds.has(post.id));
+          const uniquePosts = posts
+            .filter((post) => !existingPostsIds.has(post.id))
+            .map((post) => ({
+              ...post,
+              createdAt: new Date(post.createdAt),
+            }));
           return [...prevPosts, ...uniquePosts];
         });
         setHasMore(hasMore);
@@ -83,7 +88,12 @@ export default function Posts() {
                 <h3>
                   Comments: <span className="font-bold text-gray-900">{post._count.comments}</span>
                 </h3>
-                <h3>{post.createdAt}</h3>
+                <h3>
+                  {post.createdAt.toLocaleString("en-DE", {
+                    dateStyle: "short",
+                    timeStyle: "short",
+                  })}
+                </h3>
               </div>
               <div>
                 <Link to={`post/${post.id}`} className="hover:text-main">

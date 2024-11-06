@@ -30,7 +30,10 @@ export default function Post() {
           throw new Error("Error");
         }
         const { post } = await response.json();
-        setPost(post);
+        setPost({
+          ...post,
+          createdAt: new Date(post.createdAt),
+        });
       } catch (error) {
         console.error(error);
         setError(error);
@@ -79,7 +82,12 @@ export default function Post() {
                   {post.author.username}
                 </Link>
               </h3>
-              <p>{post.createdAt}</p>
+              <p>
+                {post.createdAt.toLocaleString("en-DE", {
+                  dateStyle: "short",
+                  timeStyle: "short",
+                })}
+              </p>
             </div>
             <hr className="border-2 border-black" />
             <div className="my-8">{renderText(post.text)}</div>

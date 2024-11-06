@@ -50,7 +50,12 @@ export default function Comments({ resource, resourceId, setForbiddenMessage }) 
         const { comments, hasMore } = await response.json();
         setComments((prevComments) => {
           const existingCommentsIds = new Set(prevComments.map((comment) => comment.id));
-          const uniqueComments = comments.filter((comment) => !existingCommentsIds.has(comment.id));
+          const uniqueComments = comments
+            .filter((comment) => !existingCommentsIds.has(comment.id))
+            .map((comment) => ({
+              ...comment,
+              createdAt: new Date(comment.createdAt),
+            }));
           return [...prevComments, ...uniqueComments];
         });
         setHasMore(hasMore);
@@ -76,7 +81,10 @@ export default function Comments({ resource, resourceId, setForbiddenMessage }) 
         throw new Error("You must be logged in to comment");
       }
       const data = await response.json();
-      setComments((prevComments) => [data.comment, ...prevComments]);
+      setComments((prevComments) => [
+        { ...data.comment, createdAt: new Date(data.comment.createdAt) },
+        ...prevComments,
+      ]);
       setComment("");
     } catch (err) {
       console.error(err);
@@ -177,12 +185,16 @@ export default function Comments({ resource, resourceId, setForbiddenMessage }) 
               >
                 {comment.author.username}
               </Link>{" "}
-              | {comment.createdAt}
+              {" "}
+              {comment.createdAt.toLocaleString("en-DE", {
+                dateStyle: "short",
+                timeStyle: "short",
+              })}
             </h3>
 
             {/* Edit and delete buttons */}
             {comment.authorId === userId && (
-              <div>
+              <div className="flex">
                 <button
                   className="text-sm px-4 transition-all hover:text-main"
                   onClick={() => toggleEditForm(comment.id, comment.text)}
