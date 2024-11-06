@@ -15,6 +15,10 @@ export default function Post() {
   const [error, setError] = useState();
   const [forbiddenMessage, setForbiddenMessage] = useState("");
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   // Load Post
   const params = useParams();
   const { postId } = params;

@@ -31,10 +31,6 @@ export default function Posts() {
   );
 
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
-  useEffect(() => {
     const fetchPosts = async () => {
       try {
         const response = await apiCall(`${api}/posts?page=${page}&limit=10`);
