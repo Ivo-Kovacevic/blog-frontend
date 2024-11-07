@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ApiContext } from "../../ApiContext";
+import { ApiContext } from "../../context/ApiContext";
 import Comments from "../../components/Comments";
 import Error from "../../components/Error";
 import apiCall from "../../api/apiCall";
@@ -34,7 +34,7 @@ export default function User() {
     fetchUser();
   }, []);
 
-  if (error) return <Error resource={"user"}/>
+  if (error) return <Error resource={"user"} />;
 
   return (
     <>
@@ -58,7 +58,6 @@ export default function User() {
           </h2>
         </section>
         <section>
-          
           <Comments
             resource={"users"}
             resourceId={parseInt(userId)}

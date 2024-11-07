@@ -15,7 +15,7 @@ import Error from "./pages/Error";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import "./assets/styles/output.css";
-import { ApiContext } from "./ApiContext";
+import { ApiContext } from "./context/ApiContext";
 
 export default function App() {
   const [username, setUsername] = useState(localStorage.getItem("username") || "");

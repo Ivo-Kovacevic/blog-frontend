@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ApiContext } from "../ApiContext";
+import { ApiContext } from "../context/ApiContext";
 
 export default function Login({ setUsername }) {
   const api = useContext(ApiContext);
@@ -43,12 +43,12 @@ export default function Login({ setUsername }) {
     <>
       {/* Display message if user tries some action without being logged in */}
       <div
-          onClick={() => setError("")}
-          className={`fixed p-4 left-1/2 -translate-x-1/2 -top-12 transition ease-out duration-300 text-white bg-red-700 shadow-md shadow-gray-500 hover:cursor-pointer w-max ${
-            error.length > 0 && "translate-y-24"
+        onClick={() => setError("")}
+        className={`fixed p-4 left-1/2 -translate-x-1/2 -top-12 transition ease-out duration-300 text-white bg-red-700 shadow-md shadow-gray-500 hover:cursor-pointer w-max ${
+          error.length > 0 && "translate-y-24"
         }`}
-        >
-          {error}
+      >
+        {error}
       </div>
 
       <div className="container mx-auto px-4">

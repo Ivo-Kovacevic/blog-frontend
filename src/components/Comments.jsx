@@ -1,6 +1,6 @@
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { ApiContext } from "../ApiContext";
+import { ApiContext } from "../context/ApiContext";
 import PropTypes from "prop-types";
 import apiCall from "../api/apiCall";
 import CommentsSkeleton from "./CommentsSkeleton";
@@ -185,7 +185,6 @@ export default function Comments({ resource, resourceId, setForbiddenMessage }) 
               >
                 {comment.author.username}
               </Link>{" "}
-              {" "}
               {comment.createdAt.toLocaleString("en-DE", {
                 dateStyle: "short",
                 timeStyle: "short",

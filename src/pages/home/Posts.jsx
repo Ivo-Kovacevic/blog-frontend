@@ -1,6 +1,6 @@
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { ApiContext } from "../../ApiContext";
+import { ApiContext } from "../../context/ApiContext";
 import PostsSkeleton from "./PostsSkeleton";
 import Error from "../../components/Error";
 import apiCall from "../../api/apiCall";

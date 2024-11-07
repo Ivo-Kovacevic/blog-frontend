@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ApiContext } from "../../ApiContext";
+import { ApiContext } from "../../context/ApiContext";
 import apiCall from "../../api/apiCall";
 import Comments from "../../components/Comments";
 import PostSkeleton from "./PostSkeleton";
