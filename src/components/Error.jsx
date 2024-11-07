@@ -12,6 +12,9 @@ export default function Error() {
     if (error) {
       setErrorMessage(error.message);
       setShow(true);
+      setTimeout(() => {
+        setError("");
+      }, 5000);
     } else {
       setShow(false);
     }
