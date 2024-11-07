@@ -608,6 +608,10 @@ video {
   top: -3rem;
 }
 
+.-top-16 {
+  top: -4rem;
+}
+
 .left-1\/2 {
   left: 50%;
 }
@@ -946,11 +950,6 @@ video {
   line-height: 1.25rem;
 }
 
-.text-xl {
-  font-size: 1.25rem;
-  line-height: 1.75rem;
-}
-
 .font-bold {
   font-weight: 700;
 }
@@ -973,11 +972,6 @@ video {
 .text-gray-900 {
   --tw-text-opacity: 1;
   color: rgb(17 24 39 / var(--tw-text-opacity));
-}
-
-.text-red-500 {
-  --tw-text-opacity: 1;
-  color: rgb(239 68 68 / var(--tw-text-opacity));
 }
 
 .text-red-600 {

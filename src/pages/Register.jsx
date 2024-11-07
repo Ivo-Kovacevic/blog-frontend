@@ -21,14 +21,14 @@ export default function Login({ setUsername }) {
         confirmPassword: confirmRegisterPassword,
       });
       const data = await response.json();
-      console.log(data);
-
       if (!response.ok) {
         if (data.errors) {
           const newErrors = [];
           data.errors.forEach((error) => {
             newErrors.push(error.msg);
           });
+          console.log(newErrors);
+          
           setError(newErrors);
         } else {
           setError(["An error occurred during registration"]);
@@ -43,8 +43,8 @@ export default function Login({ setUsername }) {
       localStorage.setItem("jwt", token);
       setUsername(registerUsername);
       return navigate("/");
-    } catch (err) {
-      console.error("Error:", err);
+    } catch (error) {
+      setError([error.message])
     }
   };
 

@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ApiContext } from "../context/ApiContext";
 import apiCall from "../api/apiCall";
+import Error from "../components/Error";
 
 export default function Login({ setUsername }) {
   const api = useContext(ApiContext);
@@ -19,8 +20,8 @@ export default function Login({ setUsername }) {
         password: loginPassword,
       });
       if (!response.ok) {
-        setError("Incorrect username or password");
-        throw new Error("Incorrect username or password");
+        setError({message: "Invalid username or password"});
+        return;
       }
       const data = await response.json();
       const userId = data.userId;
@@ -31,22 +32,14 @@ export default function Login({ setUsername }) {
       localStorage.setItem("jwt", token);
       setUsername(loginUsername);
       return navigate("/");
-    } catch (err) {
-      console.error("Error:", err);
+    } catch (error) {
+      setError(error)
     }
   };
 
   return (
     <>
-      {/* Display message if user tries some action without being logged in */}
-      <div
-        onClick={() => setError("")}
-        className={`fixed p-4 left-1/2 -translate-x-1/2 -top-12 transition ease-out duration-300 text-white bg-red-700 shadow-md shadow-gray-500 hover:cursor-pointer w-max ${
-          error.length > 0 && "translate-y-24"
-        }`}
-      >
-        {error}
-      </div>
+      {error && <Error error={error} />}
 
       <div className="container mx-auto px-4">
         <div className="my-6 sm:my-10 flex justify-center">

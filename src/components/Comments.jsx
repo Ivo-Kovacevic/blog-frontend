@@ -6,7 +6,7 @@ import apiCall from "../api/apiCall";
 import CommentsSkeleton from "./CommentsSkeleton";
 import Error from "./Error";
 
-export default function Comments({ resource, resourceId, setForbiddenMessage }) {
+export default function Comments({ resource, resourceId }) {
   const api = useContext(ApiContext);
 
   const [comments, setComments] = useState([]);
@@ -17,11 +17,12 @@ export default function Comments({ resource, resourceId, setForbiddenMessage }) 
   const [editedCommentId, setEditedCommentId] = useState(null);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [forbiddenMessage, setForbiddenMessage] = useState("");
 
   const observer = useRef();
   const lastCommentElement = useCallback(
     (element) => {
-      if (loading) return;
+      if (loading || error) return;
       if (observer.current) observer.current.disconnect();
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting && hasMore) {
@@ -60,7 +61,6 @@ export default function Comments({ resource, resourceId, setForbiddenMessage }) 
         });
         setHasMore(hasMore);
       } catch (error) {
-        console.error(error);
         setError(error);
       } finally {
         setLoading(false);
@@ -77,8 +77,8 @@ export default function Comments({ resource, resourceId, setForbiddenMessage }) 
         text: comment,
       });
       if (!response.ok) {
-        setForbiddenMessage("You must be logged in to comment");
-        throw new Error("You must be logged in to comment");
+        setForbiddenMessage({ message: "You must be logged in to comment" });
+        return;
       }
       const data = await response.json();
       setComments((prevComments) => [
@@ -86,8 +86,8 @@ export default function Comments({ resource, resourceId, setForbiddenMessage }) 
         ...prevComments,
       ]);
       setComment("");
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      setError(error);
     }
   };
 
@@ -98,12 +98,12 @@ export default function Comments({ resource, resourceId, setForbiddenMessage }) 
         "DELETE"
       );
       if (!response.ok) {
-        setForbiddenMessage("Can't delete comment");
-        throw new Error("Can't delete comment");
+        setForbiddenMessage({ message: "Could not delete comment" });
+        return;
       }
       setComments((prevComments) => prevComments.filter((comment) => comment.id !== commentId));
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      setError(error);
     }
   };
 
@@ -127,8 +127,8 @@ export default function Comments({ resource, resourceId, setForbiddenMessage }) 
         }
       );
       if (!response.ok) {
-        setForbiddenMessage("You must be logged in to edit comment");
-        throw new Error("You must be logged in to edit comment");
+        setForbiddenMessage({ message: "You must be logged in to edit comment" });
+        return;
       }
       const data = await response.json();
       setComments((prevComments) =>
@@ -137,15 +137,15 @@ export default function Comments({ resource, resourceId, setForbiddenMessage }) 
         )
       );
       setEditedCommentId(null);
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      setError(error);
     }
   };
 
-  if (error) return <Error resource={"comments"} />;
-
   return (
     <>
+      <Error error={error || forbiddenMessage} />
+
       {/* Comment form */}
       {resource === "posts" && (
         <form
@@ -241,5 +241,4 @@ export default function Comments({ resource, resourceId, setForbiddenMessage }) 
 Comments.propTypes = {
   resource: PropTypes.string,
   resourceId: PropTypes.number,
-  setForbiddenMessage: PropTypes.func.isRequired,
 };

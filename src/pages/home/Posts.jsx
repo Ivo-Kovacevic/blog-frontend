@@ -17,7 +17,7 @@ export default function Posts() {
   const observer = useRef();
   const lastPostElement = useCallback(
     (element) => {
-      if (loading) return;
+      if (loading || error) return;
       if (observer.current) observer.current.disconnect();
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting && hasMore) {
@@ -59,10 +59,10 @@ export default function Posts() {
     fetchPosts();
   }, [page]);
 
-  if (error) return <Error resource={"posts"} />;
-
   return (
     <>
+      {error && <Error error={error} />}
+
       <div className="container mx-auto grid gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 items-start">
         {posts.map((post, index) => (
           <article
