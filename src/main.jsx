@@ -8,9 +8,9 @@ import {
   Route,
 } from "react-router-dom";
 import HeaderFooter from "./components/HeaderFooter";
-import Home from "./pages/Home";
-import User from "./pages/User";
-import Post from "./pages/Post";
+import Home from "./pages/home/Home";
+import User from "./pages/user/User";
+import Post from "./pages/post/Post";
 import Error from "./pages/Error";
 import Login from "./pages/Login";
 import Register from "./pages/Register";

@@ -1,11 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ApiContext } from "../ApiContext";
-import apiCall from "../api/apiCall";
-import Comments from "../components/Comments";
-import PostSkeleton from "../components/PostSkeleton";
-import CommentsSkeleton from "../components/CommentsSkeleton";
-import Error from "../components/Error";
+import { ApiContext } from "../../ApiContext";
+import apiCall from "../../api/apiCall";
+import Comments from "../../components/Comments";
+import PostSkeleton from "./PostSkeleton";
+import CommentsSkeleton from "../../components/CommentsSkeleton";
+import Error from "../../components/Error";
 
 export default function Post() {
   const api = useContext(ApiContext);

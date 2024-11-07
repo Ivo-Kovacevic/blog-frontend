@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ApiContext } from "../ApiContext";
-import Comments from "../components/Comments";
-import Error from "../components/Error";
-import apiCall from "../api/apiCall";
+import { ApiContext } from "../../ApiContext";
+import Comments from "../../components/Comments";
+import Error from "../../components/Error";
+import apiCall from "../../api/apiCall";
 
 export default function User() {
   const api = useContext(ApiContext);

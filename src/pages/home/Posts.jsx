@@ -1,9 +1,9 @@
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { ApiContext } from "../ApiContext";
+import { ApiContext } from "../../ApiContext";
 import PostsSkeleton from "./PostsSkeleton";
-import Error from "./Error";
-import apiCall from "../api/apiCall";
+import Error from "../../components/Error";
+import apiCall from "../../api/apiCall";
 
 export default function Posts() {
   const api = useContext(ApiContext);

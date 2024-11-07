@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
-import HomeSkeleton from "../components/HomeSkeleton";
-import { ApiContext } from "../ApiContext";
-import Posts from "../components/Posts";
+import HomeSkeleton from "./HomeSkeleton";
+import Posts from "./Posts";
 
 export default function Home() {
   const [heroLoading, setHeroLoading] = useState(true);
