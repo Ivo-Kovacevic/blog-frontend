@@ -2,14 +2,15 @@ import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ApiContext } from "../context/ApiContext";
 import apiCall from "../api/apiCall";
+import { ErrorContext } from "../context/ErrorContext";
 
 export default function Login({ setUsername }) {
   const api = useContext(ApiContext);
+  const { error, setError } = useContext(ErrorContext);
 
   const [registerUsername, setRegisterUsername] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
   const [confirmRegisterPassword, setConfirmRegisterPassword] = useState("");
-  const [error, setError] = useState([]);
   const navigate = useNavigate("");
 
   const handleRegister = async (e) => {
@@ -27,11 +28,10 @@ export default function Login({ setUsername }) {
           data.errors.forEach((error) => {
             newErrors.push(error.msg);
           });
-          console.log(newErrors);
-          
-          setError(newErrors);
+
+          setError({ message: newErrors });
         } else {
-          setError(["An error occurred during registration"]);
+          setError({ message: "An error occurred" });
         }
         return;
       }
@@ -44,25 +44,12 @@ export default function Login({ setUsername }) {
       setUsername(registerUsername);
       return navigate("/");
     } catch (error) {
-      setError([error.message])
+      setError([error.message]);
     }
   };
 
   return (
     <>
-      <div
-        onClick={() => setError([])}
-        className={`fixed p-4 left-1/2 -translate-x-1/2 -top-12 transition ease-out duration-300 text-white bg-red-700 shadow-md shadow-gray-500 hover:cursor-pointer w-max ${
-          error.length > 0 && "translate-y-24"
-        }`}
-      >
-        {error.map((err, index) => (
-          <p className="my-4" key={index}>
-            {err}
-          </p>
-        ))}
-      </div>
-
       <div className="container mx-auto px-4">
         <div className="my-6 sm:my-10 flex justify-center">
           <form
