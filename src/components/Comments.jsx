@@ -145,7 +145,7 @@ export default function Comments({ resource, resourceId }) {
   return (
     <>
       {/* Comment form */}
-      {resource === "posts" && (
+      {resource === "posts" && comments.length > 0 && (
         <form
           onSubmit={postComment}
           className="mb-4 flex flex-col sm:flex-row shadow-md shadow-gray-500"

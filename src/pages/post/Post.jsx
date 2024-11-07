@@ -80,20 +80,12 @@ export default function Post() {
               </div>
               <hr className="border-2 border-black" />
               <div className="my-8">{renderText(post.text)}</div>
+              <h2 className="my-4 text-lg">Comments: {post._count.comments}</h2>
             </section>
           )
         )}
         <section>
-          {loading ? (
-            <CommentsSkeleton />
-          ) : (
-            post && (
-              <>
-                <h2 className="my-4 text-lg">Comments: {post._count.comments}</h2>
-                <Comments resource="posts" resourceId={parseInt(postId)} />
-              </>
-            )
-          )}
+          <Comments resource="posts" resourceId={parseInt(postId)} />
         </section>
       </article>
     </>

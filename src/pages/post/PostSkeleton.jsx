@@ -1,7 +1,7 @@
 export default function PostSkeleton() {
   return (
     <>
-      <section>
+      <section className="mb-4">
         <div className="my-8">
           <div className="my-2 h-14 w-full animate-pulse bg-gray-300 rounded"></div>
           <div className="my-2 h-14 w-4/5 animate-pulse bg-gray-300 rounded"></div>
@@ -18,6 +18,9 @@ export default function PostSkeleton() {
               } animate-pulse bg-gray-300 rounded`}
             ></p>
           ))}
+        </div>
+        <div className="h-16 bg-gray-300 animate-pulse rounded">
+          <div className="h-full w-36 float-right bg-gray-400 animate-pulse rounded" />
         </div>
       </section>
     </>
