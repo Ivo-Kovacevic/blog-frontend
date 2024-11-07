@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ApiContext } from "../context/ApiContext";
+import apiCall from "../api/apiCall";
 
 export default function Login({ setUsername }) {
   const api = useContext(ApiContext);
@@ -13,13 +14,9 @@ export default function Login({ setUsername }) {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${api}/login`, {
-        mode: "cors",
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username: loginUsername, password: loginPassword }),
+      const response = await apiCall(`${api}/login`, "POST", {
+        username: loginUsername,
+        password: loginPassword,
       });
       if (!response.ok) {
         setError("Incorrect username or password");
