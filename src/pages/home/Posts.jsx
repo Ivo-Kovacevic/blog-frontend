@@ -1,15 +1,16 @@
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ApiContext } from "../../context/ApiContext";
+import { ErrorContext } from "../../context/ErrorContext";
 import PostsSkeleton from "./PostsSkeleton";
 import Error from "../../components/Error";
 import apiCall from "../../api/apiCall";
 
 export default function Posts() {
   const api = useContext(ApiContext);
+  const { error, setError } = useContext(ErrorContext);
 
   const [posts, setPosts] = useState([]);
-  const [error, setError] = useState();
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -61,8 +62,6 @@ export default function Posts() {
 
   return (
     <>
-      {error && <Error error={error} />}
-
       <div className="container mx-auto grid gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 items-start">
         {posts.map((post, index) => (
           <article

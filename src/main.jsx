@@ -16,6 +16,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import "./assets/styles/output.css";
 import { ApiContext } from "./context/ApiContext";
+import { ErrorProvider } from "./context/ErrorContext";
 
 export default function App() {
   const [username, setUsername] = useState(localStorage.getItem("username") || "");
@@ -42,7 +43,9 @@ export default function App() {
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <ApiContext.Provider value={import.meta.env.VITE_API_URL}>
-      <App />
+      <ErrorProvider>
+        <App />
+      </ErrorProvider>
     </ApiContext.Provider>
   </StrictMode>
 );

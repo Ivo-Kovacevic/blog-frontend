@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { ApiContext } from "../../context/ApiContext";
+import { ErrorContext } from "../../context/ErrorContext";
 import apiCall from "../../api/apiCall";
 import Comments from "../../components/Comments";
 import PostSkeleton from "./PostSkeleton";
@@ -9,10 +10,10 @@ import Error from "../../components/Error";
 
 export default function Post() {
   const api = useContext(ApiContext);
+  const { error, setError } = useContext(ErrorContext);
 
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -53,8 +54,6 @@ export default function Post() {
 
   return (
     <>
-      {error && <Error error={error} />}
-
       <article className="mx-auto px-4 sm:px-8 max-w-container">
         {loading ? (
           <PostSkeleton />
@@ -91,10 +90,7 @@ export default function Post() {
             post && (
               <>
                 <h2 className="my-4 text-lg">Comments: {post._count.comments}</h2>
-                <Comments
-                  resource="posts"
-                  resourceId={parseInt(postId)}
-                />
+                <Comments resource="posts" resourceId={parseInt(postId)} />
               </>
             )
           )}

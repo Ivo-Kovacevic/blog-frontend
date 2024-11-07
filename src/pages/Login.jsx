@@ -3,13 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { ApiContext } from "../context/ApiContext";
 import apiCall from "../api/apiCall";
 import Error from "../components/Error";
+import { ErrorContext } from "../context/ErrorContext";
 
 export default function Login({ setUsername }) {
   const api = useContext(ApiContext);
+  const { error, setError } = useContext(ErrorContext);
 
   const [loginUsername, setLoginUsername] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
-  const [error, setError] = useState("");
   const navigate = useNavigate("");
 
   const handleLogin = async (e) => {
@@ -39,8 +40,6 @@ export default function Login({ setUsername }) {
 
   return (
     <>
-      {error && <Error error={error} />}
-
       <div className="container mx-auto px-4">
         <div className="my-6 sm:my-10 flex justify-center">
           <form

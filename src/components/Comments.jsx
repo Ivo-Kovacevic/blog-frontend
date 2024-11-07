@@ -1,6 +1,7 @@
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ApiContext } from "../context/ApiContext";
+import { ErrorContext } from "../context/ErrorContext";
 import PropTypes from "prop-types";
 import apiCall from "../api/apiCall";
 import CommentsSkeleton from "./CommentsSkeleton";
@@ -8,16 +9,15 @@ import Error from "./Error";
 
 export default function Comments({ resource, resourceId }) {
   const api = useContext(ApiContext);
+  const { error, setError } = useContext(ErrorContext);
 
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState();
   const [comment, setComment] = useState("");
   const [editedText, setEditedText] = useState("");
   const [editedCommentId, setEditedCommentId] = useState(null);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const [forbiddenMessage, setForbiddenMessage] = useState("");
 
   const observer = useRef();
   const lastCommentElement = useCallback(
@@ -77,7 +77,7 @@ export default function Comments({ resource, resourceId }) {
         text: comment,
       });
       if (!response.ok) {
-        setForbiddenMessage({ message: "You must be logged in to comment" });
+        setError({ message: "You must be logged in to comment" });
         return;
       }
       const data = await response.json();
@@ -98,7 +98,7 @@ export default function Comments({ resource, resourceId }) {
         "DELETE"
       );
       if (!response.ok) {
-        setForbiddenMessage({ message: "Could not delete comment" });
+        setError({ message: "Could not delete comment" });
         return;
       }
       setComments((prevComments) => prevComments.filter((comment) => comment.id !== commentId));
@@ -127,7 +127,7 @@ export default function Comments({ resource, resourceId }) {
         }
       );
       if (!response.ok) {
-        setForbiddenMessage({ message: "You must be logged in to edit comment" });
+        setError({ message: "You must be logged in to edit comment" });
         return;
       }
       const data = await response.json();
@@ -144,8 +144,6 @@ export default function Comments({ resource, resourceId }) {
 
   return (
     <>
-      <Error error={error || forbiddenMessage} />
-
       {/* Comment form */}
       {resource === "posts" && (
         <form
