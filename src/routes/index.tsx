@@ -1,8 +1,13 @@
-import React, { useState, useEffect, useContext } from "react";
-import HomeSkeleton from "./HomeSkeleton.js";
-import Posts from "./Posts.js";
+import { useEffect, useState } from 'react'
+import { createFileRoute } from '@tanstack/react-router'
+import HomeSkeleton from '../components/home/HomeSkeleton';
+import Posts from '../components/home/Posts';
 
-export default function Home() {
+export const Route = createFileRoute('/')({
+  component: Home,
+})
+
+function Home() {
   const [heroLoading, setHeroLoading] = useState(true);
 
   useEffect(() => {

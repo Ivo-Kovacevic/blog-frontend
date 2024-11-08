@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
-import { useErrorContext } from "./ErrorContext.jsx";
-import apiCall from "../api/apiCall.js";
-import { PostType } from "../@types/response.js";
+import { useErrorContext } from "./ErrorContext";
+import apiCall from "../api/apiCall";
+import { PostType } from "../@types/response";
 
 type PostsContext = {
   posts: PostType[];
@@ -14,7 +14,7 @@ type PostsContext = {
 export const PostsContext = createContext<PostsContext | null>(null);
 
 export const PostsProvider = ({ children }: { children: ReactNode }) => {
-  const { error, setError } = useErrorContext();
+  const { setError } = useErrorContext();
   const [posts, setPosts] = useState<PostType[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);

@@ -1,14 +1,16 @@
-import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import apiCall from "../api/apiCall.js";
-import { useErrorContext } from "../context/ErrorContext.js";
+import React, { useState } from "react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useErrorContext } from "../context/ErrorContext";
+import apiCall from "../api/apiCall";
+import { useUserContext } from "../context/UserContext";
 
-type Login = {
-  setUsername: React.Dispatch<React.SetStateAction<string | null>>;
-}
+export const Route = createFileRoute("/login")({
+  component: Login,
+});
 
-export default function Login({ setUsername }: Login) {
-  const { error, setError } = useErrorContext();
+function Login() {
+  const { setError } = useErrorContext();
+  const { setUsername } = useUserContext();
 
   const [loginUsername, setLoginUsername] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
@@ -22,7 +24,7 @@ export default function Login({ setUsername }: Login) {
         password: loginPassword,
       });
       if (!response.ok) {
-        setError({message: "Invalid username or password"});
+        setError({ message: "Invalid username or password" });
         return;
       }
       const data = await response.json();
@@ -33,9 +35,11 @@ export default function Login({ setUsername }: Login) {
       localStorage.setItem("username", name);
       localStorage.setItem("jwt", token);
       setUsername(loginUsername);
-      return navigate("/");
+      navigate({ to: "/" });
     } catch (error) {
-        error instanceof Error ? setError(error) : setError({ message: "An error occurred" });
+      console.log(error);
+
+      error instanceof Error ? setError(error) : setError({ message: "An error occurred" });
     }
   };
 

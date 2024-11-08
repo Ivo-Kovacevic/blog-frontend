@@ -1,11 +1,12 @@
-import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import apiCall from "../api/apiCall.js";
-import { useErrorContext } from "../context/ErrorContext.js";
+import React, { useState } from "react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useErrorContext } from "../context/ErrorContext";
+import apiCall from "../api/apiCall";
+import { useUserContext } from "../context/UserContext";
 
-type Login = {
-  setUsername: React.Dispatch<React.SetStateAction<string | null>>;
-};
+export const Route = createFileRoute("/register")({
+  component: Login,
+});
 
 type ErrorType = {
   errors: {
@@ -13,8 +14,9 @@ type ErrorType = {
   }[];
 };
 
-export default function Login({ setUsername }: Login) {
-  const { error, setError } = useErrorContext();
+export default function Login() {
+  const { setError } = useErrorContext();
+  const { setUsername } = useUserContext();
 
   const [registerUsername, setRegisterUsername] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
@@ -51,7 +53,7 @@ export default function Login({ setUsername }: Login) {
       localStorage.setItem("username", name);
       localStorage.setItem("jwt", token);
       setUsername(registerUsername);
-      return navigate("/");
+      navigate({ to: "/" });
     } catch (error) {
       setError({ message: "Registration failed" });
     }

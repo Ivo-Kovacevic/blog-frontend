@@ -1,11 +1,11 @@
 import { useCallback, useRef } from "react";
-import { Link } from "react-router-dom";
-import { useErrorContext } from "../../context/ErrorContext.js";
-import PostsSkeleton from "./PostsSkeleton.js";
-import { usePostsContext } from "../../context/PostsContext.js";
+import { useErrorContext } from "../../context/ErrorContext";
+import PostsSkeleton from "./PostsSkeleton";
+import { usePostsContext } from "../../context/PostsContext";
+import { Link } from "@tanstack/react-router";
 
 export default function Posts() {
-  const { error, setError } = useErrorContext();
+  const { error } = useErrorContext();
   const { posts, setPage, loading, setLoading, hasMore } = usePostsContext();
 
   const observer = useRef<IntersectionObserver | null>();

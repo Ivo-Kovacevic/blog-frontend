@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import apiCall from "../api/apiCall.js";
-import CommentsSkeleton from "./CommentsSkeleton.js";
-import { useErrorContext } from "../context/ErrorContext.js";
-import { CommentType } from "../@types/response.js";
+import apiCall from "../api/apiCall";
+import CommentsSkeleton from "./CommentsSkeleton";
+import { useErrorContext } from "../context/ErrorContext";
+import { CommentType } from "../@types/response";
+import { Link } from "@tanstack/react-router";
 
 type Comments = {
   resource: string;
@@ -200,7 +200,7 @@ export default function Comments({ resource, resourceId }: Comments) {
                 </button>
                 <button
                   className="text-sm px-4 transition-all hover:text-red-700"
-                  onClick={(e) => deleteComment(comment.id)}
+                  onClick={() => deleteComment(comment.id)}
                 >
                   Delete
                 </button>

@@ -1,12 +1,13 @@
-import { Link, Outlet } from "react-router-dom";
-import Error from "./Error.js";
+import Error from "./Error";
+import { Link, ReactNode } from "@tanstack/react-router";
+import { useUserContext } from "../context/UserContext";
 
-type HeaderFooter = {
-  username: string | null;
-  setUsername: React.Dispatch<React.SetStateAction<string | null>>;
+type Main = {
+  children: ReactNode;
 };
 
-export default function HeaderFooter({ username, setUsername }: HeaderFooter) {
+export default function HeaderFooter({ children }: Main) {
+  const { username, setUsername} = useUserContext();
 
   const handleLogout = () => {
     localStorage.removeItem("userId");
@@ -53,7 +54,7 @@ export default function HeaderFooter({ username, setUsername }: HeaderFooter) {
         </nav>
       </header>
 
-      <Outlet />
+      {children}
 
       <footer className="p-4">
         <div className="container mx-auto px-4 py-8">

@@ -1,15 +1,19 @@
-import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
-import apiCall from "../../api/apiCall.js";
-import Comments from "../../components/Comments.js";
-import PostSkeleton from "./PostSkeleton.js";
-import { useErrorContext } from "../../context/ErrorContext.js";
-import { usePostsContext } from "../../context/PostsContext.js";
-import { PostType } from "../../@types/response.js";
+import { useEffect, useState } from 'react'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import Comments from '../../components/Comments';
+import PostSkeleton from '../../components/post/PostSkeleton';
+import { PostType } from '../../@types/response';
+import { useErrorContext } from '../../context/ErrorContext';
+import { usePostsContext } from '../../context/PostsContext';
+import apiCall from '../../api/apiCall';
 
-export default function Post() {
-  const { error, setError } = useErrorContext();
-  const { posts, setPage, loading, setLoading, hasMore } = usePostsContext();
+export const Route = createFileRoute('/post/$postId')({
+  component: Post,
+})
+
+function Post() {
+  const { setError } = useErrorContext();
+  const { posts, loading, setLoading } = usePostsContext();
 
   const [post, setPost] = useState<PostType | null>(null);
   // const [loading, setLoading] = useState(true);
@@ -19,7 +23,7 @@ export default function Post() {
   }, []);
 
   // Load Post
-  const { postId } = useParams();
+  const { postId } = Route.useParams();
   useEffect(() => {
     const fetchPost = async () => {
       try {

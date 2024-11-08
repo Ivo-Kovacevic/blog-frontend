@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { useErrorContext } from "../context/ErrorContext.jsx";
+import { useErrorContext } from "../context/ErrorContext";
 
 export default function Error() {
   const { error, setError } = useErrorContext();
 
   const [errorMessage, setErrorMessage] = useState("");
   const [show, setShow] = useState(false);
-  const location = useLocation();
+
   useEffect(() => {
     if (error) {
       setErrorMessage(error.message);
@@ -19,11 +18,7 @@ export default function Error() {
       setShow(false);
     }
   }, [error]);
-  useEffect(() => {
-    if (error) {
-      setError({ message: "TEST" });
-    }
-  }, [location.pathname]);
+
   return (
     <>
       <div

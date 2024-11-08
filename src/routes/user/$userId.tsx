@@ -1,12 +1,16 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import Comments from "../../components/Comments.js";
-import apiCall from "../../api/apiCall.js";
+import React, { useEffect, useState } from "react";
+import { createFileRoute } from "@tanstack/react-router";
 import { useErrorContext } from "../../context/ErrorContext.js";
-import UserSkeleton from "./UserSkeleton.jsx";
+import apiCall from "../../api/apiCall.js";
 import { UserType } from "../../@types/response.js";
+import UserSkeleton from "../../components/user/UserSkeleton.js";
+import Comments from "../../components/Comments.js";
 
-export default function User() {
+export const Route = createFileRoute("/user/$userId")({
+  component: User,
+});
+
+function User() {
   const { error, setError } = useErrorContext();
 
   const [user, setUser] = useState<UserType | null>(null);
@@ -16,8 +20,7 @@ export default function User() {
     window.scrollTo(0, 0);
   }, []);
 
-  const params = useParams();
-  const { userId } = params;
+  const { userId } = Route.useParams();
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -67,10 +70,7 @@ export default function User() {
           )
         )}
         <section>
-          <Comments
-            resource={"users"}
-            resourceId={parseInt(userId ?? "0")}
-          />
+          <Comments resource={"users"} resourceId={parseInt(userId ?? "0")} />
         </section>
       </div>
     </>

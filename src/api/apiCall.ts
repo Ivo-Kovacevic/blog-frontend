@@ -1,13 +1,18 @@
 export default async function apiCall(endpoint: string, method = "GET", body: {}) {
   const api = import.meta.env.VITE_API_URL;
   const token = localStorage.getItem("jwt");
-  return await fetch(`${api}/${endpoint}`, {
+  const options: RequestInit = {
+    method,
     mode: "cors",
-    method: method,
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(body),
-  });
+  };
+
+  if (method !== "GET" && Object.keys(body).length > 0) {
+    options.body = JSON.stringify(body);
+  }
+
+  return await fetch(`${api}/${endpoint}`, options);
 }
