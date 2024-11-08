@@ -1,16 +1,16 @@
-import { useContext, useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
-import Comments from "../../components/Comments";
-import apiCall from "../../api/apiCall";
-import { ErrorContext } from "../../context/ErrorContext";
-import UserSkeleton from "./UserSkeleton";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import Comments from "../../components/Comments.js";
+import apiCall from "../../api/apiCall.js";
+import { useErrorContext } from "../../context/ErrorContext.js";
+import UserSkeleton from "./UserSkeleton.jsx";
+import { UserType } from "../../@types/response.js";
 
 export default function User() {
-  const { error, setError } = useContext(ErrorContext);
+  const { error, setError } = useErrorContext();
 
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<UserType | null>(null);
   const [loading, setLoading] = useState(true);
-  const [forbiddenMessage, setForbiddenMessage] = useState("");
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -21,7 +21,7 @@ export default function User() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await apiCall(`users/${userId}`);
+        const response = await apiCall(`users/${userId}`, "GET", {});
         if (!response.ok) {
           setError({ message: "Error while fetching the user" });
           return;
@@ -29,7 +29,7 @@ export default function User() {
         const user = await response.json();
         setUser(user);
       } catch (error) {
-        setError(error);
+        error instanceof Error ? setError(error) : setError({ message: "An error occurred" });
       } finally {
         setLoading(false);
       }
@@ -69,8 +69,7 @@ export default function User() {
         <section>
           <Comments
             resource={"users"}
-            resourceId={parseInt(userId)}
-            setForbiddenMessage={setForbiddenMessage}
+            resourceId={parseInt(userId ?? "0")}
           />
         </section>
       </div>

@@ -1,16 +1,16 @@
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useRef } from "react";
 import { Link } from "react-router-dom";
-import { ErrorContext } from "../../context/ErrorContext";
-import PostsSkeleton from "./PostsSkeleton";
-import { PostsContext } from "../../context/PostsContext";
+import { useErrorContext } from "../../context/ErrorContext.js";
+import PostsSkeleton from "./PostsSkeleton.js";
+import { usePostsContext } from "../../context/PostsContext.js";
 
 export default function Posts() {
-  const { error, setError } = useContext(ErrorContext);
-  const { posts, setPage, loading, setLoading, hasMore } = useContext(PostsContext);
+  const { error, setError } = useErrorContext();
+  const { posts, setPage, loading, setLoading, hasMore } = usePostsContext();
 
-  const observer = useRef();
+  const observer = useRef<IntersectionObserver | null>();
   const lastPostElement = useCallback(
-    (element) => {
+    (element: HTMLDivElement) => {
       if (loading || error) return;
       if (observer.current) observer.current.disconnect();
       observer.current = new IntersectionObserver((entries) => {
@@ -51,12 +51,7 @@ export default function Posts() {
                 <h3>
                   Comments: <span className="font-bold text-gray-900">{post._count.comments}</span>
                 </h3>
-                <h3>
-                  {post.createdAt.toLocaleString("en-DE", {
-                    dateStyle: "short",
-                    timeStyle: "short",
-                  })}
-                </h3>
+                <h3>{post.createdAt.toLocaleString("en-DE")}</h3>
               </div>
               <div>
                 <Link to={`post/${post.id}`} className="hover:text-main">

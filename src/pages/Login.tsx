@@ -1,16 +1,20 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import apiCall from "../api/apiCall";
-import { ErrorContext } from "../context/ErrorContext";
+import apiCall from "../api/apiCall.js";
+import { useErrorContext } from "../context/ErrorContext.js";
 
-export default function Login({ setUsername }) {
-  const { error, setError } = useContext(ErrorContext);
+type Login = {
+  setUsername: React.Dispatch<React.SetStateAction<string | null>>;
+}
+
+export default function Login({ setUsername }: Login) {
+  const { error, setError } = useErrorContext();
 
   const [loginUsername, setLoginUsername] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
-  const navigate = useNavigate("");
+  const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const response = await apiCall(`login`, "POST", {
@@ -31,7 +35,7 @@ export default function Login({ setUsername }) {
       setUsername(loginUsername);
       return navigate("/");
     } catch (error) {
-      setError(error)
+        error instanceof Error ? setError(error) : setError({ message: "An error occurred" });
     }
   };
 

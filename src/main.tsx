@@ -7,19 +7,19 @@ import {
   RouterProvider,
   Route,
 } from "react-router-dom";
-import HeaderFooter from "./components/HeaderFooter";
-import Home from "./pages/home/Home";
-import User from "./pages/user/User";
-import Post from "./pages/post/Post";
-import Error from "./pages/Error";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
+import HeaderFooter from "./components/HeaderFooter.js";
+import Home from "./pages/home/Home.js";
+import User from "./pages/user/User.js";
+import Post from "./pages/post/Post.js";
+import Error from "./pages/Error.js";
+import Login from "./pages/Login.js";
+import Register from "./pages/Register.js";
 import "./assets/styles/output.css";
-import { ErrorProvider } from "./context/ErrorContext";
-import { PostsProvider } from "./context/PostsContext";
+import { ErrorProvider } from "./context/ErrorContext.js";
+import { PostsProvider } from "./context/PostsContext.js";
 
 export default function App() {
-  const [username, setUsername] = useState(localStorage.getItem("username") || "");
+  const [username, setUsername] = useState<string | null>(localStorage.getItem("username") || null);
 
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -40,7 +40,7 @@ export default function App() {
   return <RouterProvider router={router} />;
 }
 
-createRoot(document.getElementById("root")).render(
+createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ErrorProvider>
       <PostsProvider>

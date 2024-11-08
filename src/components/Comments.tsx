@@ -1,25 +1,30 @@
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { ErrorContext } from "../context/ErrorContext";
 import PropTypes from "prop-types";
-import apiCall from "../api/apiCall";
-import CommentsSkeleton from "./CommentsSkeleton";
-import Error from "./Error";
+import apiCall from "../api/apiCall.js";
+import CommentsSkeleton from "./CommentsSkeleton.js";
+import { useErrorContext } from "../context/ErrorContext.js";
+import { CommentType } from "../@types/response.js";
 
-export default function Comments({ resource, resourceId }) {
-  const { error, setError } = useContext(ErrorContext);
+type Comments = {
+  resource: string;
+  resourceId: number;
+};
 
-  const [comments, setComments] = useState([]);
+export default function Comments({ resource, resourceId }: Comments) {
+  const { error, setError } = useErrorContext();
+
+  const [comments, setComments] = useState<CommentType[]>([]);
   const [loading, setLoading] = useState(true);
   const [comment, setComment] = useState("");
   const [editedText, setEditedText] = useState("");
-  const [editedCommentId, setEditedCommentId] = useState(null);
+  const [editedCommentId, setEditedCommentId] = useState<number | null>(null);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
-  const observer = useRef();
+  const observer = useRef<IntersectionObserver>();
   const lastCommentElement = useCallback(
-    (element) => {
+    (element: HTMLDivElement) => {
       if (loading || error) return;
       if (observer.current) observer.current.disconnect();
       observer.current = new IntersectionObserver((entries) => {
@@ -33,7 +38,7 @@ export default function Comments({ resource, resourceId }) {
     [loading, hasMore]
   );
 
-  const userId = parseInt(localStorage.getItem("userId"));
+  const userId = parseInt(localStorage.getItem("userId") ?? "0");
 
   // Load Comments
   useEffect(() => {
@@ -41,12 +46,15 @@ export default function Comments({ resource, resourceId }) {
       try {
         const response = await apiCall(
           `${resource}/${resourceId}/comments?page=${page}&limit=5`,
-          "GET"
+          "GET",
+          {}
         );
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          setError({ message: "An error occurred" });
+          return;
         }
-        const { comments, hasMore } = await response.json();
+        const { comments, hasMore }: { comments: CommentType[]; hasMore: boolean } =
+          await response.json();
         setComments((prevComments) => {
           const existingCommentsIds = new Set(prevComments.map((comment) => comment.id));
           const uniqueComments = comments
@@ -59,7 +67,7 @@ export default function Comments({ resource, resourceId }) {
         });
         setHasMore(hasMore);
       } catch (error) {
-        setError(error);
+        error instanceof Error ? setError(error) : setError({ message: "An error occurred" });
       } finally {
         setLoading(false);
       }
@@ -68,7 +76,7 @@ export default function Comments({ resource, resourceId }) {
   }, [page]);
 
   // Add new comment on submit
-  const postComment = async (e) => {
+  const postComment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const response = await apiCall(`${resource}/${resourceId}/comments`, "POST", {
@@ -85,15 +93,16 @@ export default function Comments({ resource, resourceId }) {
       ]);
       setComment("");
     } catch (error) {
-      setError(error);
+      error instanceof Error ? setError(error) : setError({ message: "An error occurred" });
     }
   };
 
-  const deleteComment = async (commentId) => {
+  const deleteComment = async (commentId: number) => {
     try {
       const response = await apiCall(
         `${resource}/${resourceId}/comments/${commentId}`,
-        "DELETE"
+        "DELETE",
+        {}
       );
       if (!response.ok) {
         setError({ message: "Could not delete comment" });
@@ -101,11 +110,11 @@ export default function Comments({ resource, resourceId }) {
       }
       setComments((prevComments) => prevComments.filter((comment) => comment.id !== commentId));
     } catch (error) {
-      setError(error);
+      error instanceof Error ? setError(error) : setError({ message: "An error occurred" });
     }
   };
 
-  const toggleEditForm = (commentId, commentText) => {
+  const toggleEditForm = (commentId: number, commentText: string) => {
     if (editedCommentId === commentId) {
       setEditedCommentId(null);
     } else {
@@ -114,16 +123,12 @@ export default function Comments({ resource, resourceId }) {
     }
   };
 
-  const handleEditComment = async (e, commentId) => {
+  const handleEditComment = async (e: React.FormEvent<HTMLFormElement>, commentId: number) => {
     e.preventDefault();
     try {
-      const response = await apiCall(
-        `${resource}/${resourceId}/comments/${commentId}`,
-        "PUT",
-        {
-          text: editedText,
-        }
-      );
+      const response = await apiCall(`${resource}/${resourceId}/comments/${commentId}`, "PUT", {
+        text: editedText,
+      });
       if (!response.ok) {
         setError({ message: "You must be logged in to edit comment" });
         return;
@@ -136,7 +141,7 @@ export default function Comments({ resource, resourceId }) {
       );
       setEditedCommentId(null);
     } catch (error) {
-      setError(error);
+      error instanceof Error ? setError(error) : setError({ message: "An error occurred" });
     }
   };
 
@@ -181,10 +186,7 @@ export default function Comments({ resource, resourceId }) {
               >
                 {comment.author.username}
               </Link>{" "}
-              {comment.createdAt.toLocaleString("en-DE", {
-                dateStyle: "short",
-                timeStyle: "short",
-              })}
+              {comment.createdAt.toLocaleString("en-DE")}
             </h3>
 
             {/* Edit and delete buttons */}

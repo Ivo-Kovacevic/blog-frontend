@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
-import HomeSkeleton from "./HomeSkeleton";
-import Posts from "./Posts";
+import HomeSkeleton from "./HomeSkeleton.js";
+import Posts from "./Posts.js";
 
 export default function Home() {
   const [heroLoading, setHeroLoading] = useState(true);

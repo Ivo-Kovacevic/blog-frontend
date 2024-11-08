@@ -1,16 +1,18 @@
 import { Link, Outlet } from "react-router-dom";
-import { useContext, useState } from "react";
-import { ErrorContext } from "../context/ErrorContext";
-import Error from "./Error";
+import Error from "./Error.js";
 
-export default function HeaderFooter({ username, setUsername }) {
-  const { error, setError } = useContext(ErrorContext);
+type HeaderFooter = {
+  username: string | null;
+  setUsername: React.Dispatch<React.SetStateAction<string | null>>;
+};
+
+export default function HeaderFooter({ username, setUsername }: HeaderFooter) {
 
   const handleLogout = () => {
     localStorage.removeItem("userId");
     localStorage.removeItem("username");
     localStorage.removeItem("jwt");
-    setUsername("");
+    setUsername(null);
   };
 
   return (

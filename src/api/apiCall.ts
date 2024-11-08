@@ -1,4 +1,4 @@
-export default async function apiCall(endpoint, method = "GET", body) {
+export default async function apiCall(endpoint: string, method = "GET", body: {}) {
   const api = import.meta.env.VITE_API_URL;
   const token = localStorage.getItem("jwt");
   return await fetch(`${api}/${endpoint}`, {

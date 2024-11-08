@@ -1,60 +1,60 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { PostsContext } from "../../context/PostsContext";
-import { ErrorContext } from "../../context/ErrorContext";
-import apiCall from "../../api/apiCall";
-import Comments from "../../components/Comments";
-import PostSkeleton from "./PostSkeleton";
+import apiCall from "../../api/apiCall.js";
+import Comments from "../../components/Comments.js";
+import PostSkeleton from "./PostSkeleton.js";
+import { useErrorContext } from "../../context/ErrorContext.js";
+import { usePostsContext } from "../../context/PostsContext.js";
+import { PostType } from "../../@types/response.js";
 
 export default function Post() {
-  const { error, setError } = useContext(ErrorContext);
-  const { posts, setPosts } = useContext(PostsContext);
+  const { error, setError } = useErrorContext();
+  const { posts, setPage, loading, setLoading, hasMore } = usePostsContext();
 
-  const [post, setPost] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [post, setPost] = useState<PostType | null>(null);
+  // const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   // Load Post
-  const params = useParams();
-  const { postId } = params;
+  const { postId } = useParams();
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await apiCall(`posts/${postId}`);
+        const response = await apiCall(`posts/${postId}`, "GET", {});
         if (!response.ok) {
           setError({ message: "Error while fetching the post" });
           return;
         }
-        const { post } = await response.json();
+        const { post }: { post: PostType } = await response.json();
         setPost({
           ...post,
           createdAt: new Date(post.createdAt),
         });
       } catch (error) {
-        setError(error);
+        error instanceof Error ? setError(error) : setError({ message: "An error occurred" });
       } finally {
         setLoading(false);
       }
     };
 
     // Check if post is stored in posts array then get it from there, else fetch it from api
-    const foundPost = posts.find((post) => post.id === parseInt(postId));
-    if (foundPost) {
-      setPost({
-        ...foundPost,
-        createdAt: new Date(foundPost.createdAt),
-      });
-      setLoading(false);
-    } else {
-      fetchPost();
-    }
+      const foundPost = posts.find((post) => post.id === parseInt(postId ?? "0"));
+      if (foundPost) {
+        setPost({
+          ...foundPost,
+          createdAt: new Date(foundPost.createdAt),
+        });
+        setLoading(false);
+      } else {
+        fetchPost();
+      }
   }, []);
 
-  const renderText = (content) => {
-    return content.split("\n").map((line, index) => (
+  const renderText = (text: string) => {
+    return text.split("\n").map((line, index) => (
       <p key={index} className="mb-4">
         {line}
       </p>
@@ -81,10 +81,7 @@ export default function Post() {
                   </Link>
                 </h3>
                 <p>
-                  {post.createdAt.toLocaleString("en-DE", {
-                    dateStyle: "short",
-                    timeStyle: "short",
-                  })}
+                  {post.createdAt.toLocaleString("en-DE")}
                 </p>
               </div>
               <hr className="border-2 border-black" />
@@ -94,7 +91,7 @@ export default function Post() {
           )
         )}
         <section>
-          <Comments resource="posts" resourceId={parseInt(postId)} />
+          <Comments resource="posts" resourceId={parseInt(postId ?? "0")} />
         </section>
       </article>
     </>

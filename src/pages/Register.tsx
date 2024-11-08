@@ -1,17 +1,27 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import apiCall from "../api/apiCall";
-import { ErrorContext } from "../context/ErrorContext";
+import apiCall from "../api/apiCall.js";
+import { useErrorContext } from "../context/ErrorContext.js";
 
-export default function Login({ setUsername }) {
-  const { error, setError } = useContext(ErrorContext);
+type Login = {
+  setUsername: React.Dispatch<React.SetStateAction<string | null>>;
+};
+
+type ErrorType = {
+  errors: {
+    msg: string;
+  }[];
+};
+
+export default function Login({ setUsername }: Login) {
+  const { error, setError } = useErrorContext();
 
   const [registerUsername, setRegisterUsername] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
   const [confirmRegisterPassword, setConfirmRegisterPassword] = useState("");
-  const navigate = useNavigate("");
+  const navigate = useNavigate();
 
-  const handleRegister = async (e) => {
+  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const response = await apiCall(`users`, "POST", {
@@ -19,20 +29,21 @@ export default function Login({ setUsername }) {
         password: registerPassword,
         confirmPassword: confirmRegisterPassword,
       });
-      const data = await response.json();
       if (!response.ok) {
+        const data: ErrorType = await response.json();
         if (data.errors) {
-          const newErrors = [];
+          const newErrors: string[] = [];
           data.errors.forEach((error) => {
             newErrors.push(error.msg);
           });
 
-          setError({ message: newErrors });
+          setError({ message: "Registration failed", messages: newErrors });
         } else {
           setError({ message: "An error occurred" });
         }
         return;
       }
+      const data = await response.json();
       const userId = data.userId;
       const name = data.username;
       const token = data.token;
@@ -42,7 +53,7 @@ export default function Login({ setUsername }) {
       setUsername(registerUsername);
       return navigate("/");
     } catch (error) {
-      setError([error.message]);
+      setError({ message: "Registration failed" });
     }
   };
 

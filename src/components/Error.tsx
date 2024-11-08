@@ -1,9 +1,9 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { ErrorContext } from "../context/ErrorContext";
+import { useErrorContext } from "../context/ErrorContext.jsx";
 
 export default function Error() {
-  const { error, setError } = useContext(ErrorContext);
+  const { error, setError } = useErrorContext();
 
   const [errorMessage, setErrorMessage] = useState("");
   const [show, setShow] = useState(false);
@@ -13,7 +13,7 @@ export default function Error() {
       setErrorMessage(error.message);
       setShow(true);
       setTimeout(() => {
-        setError("");
+        setError(null);
       }, 5000);
     } else {
       setShow(false);
@@ -21,13 +21,13 @@ export default function Error() {
   }, [error]);
   useEffect(() => {
     if (error) {
-      setError("");
+      setError({ message: "TEST" });
     }
   }, [location.pathname]);
   return (
     <>
       <div
-        onClick={() => setError("")}
+        onClick={() => setError(null)}
         className={`z-10 fixed p-4 left-1/2 -translate-x-1/2 -top-28 transition ease-out duration-500 text-white bg-red-700 shadow-md shadow-gray-500 hover:cursor-pointer w-max ${
           show && "translate-y-36 block"
         }`}
