@@ -1,14 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ApiContext } from "../../context/ApiContext";
 import Comments from "../../components/Comments";
-import Error from "../../components/Error";
 import apiCall from "../../api/apiCall";
 import { ErrorContext } from "../../context/ErrorContext";
 import UserSkeleton from "./UserSkeleton";
 
 export default function User() {
-  const api = useContext(ApiContext);
   const { error, setError } = useContext(ErrorContext);
 
   const [user, setUser] = useState(null);
@@ -24,7 +21,7 @@ export default function User() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await apiCall(`${api}/users/${userId}`);
+        const response = await apiCall(`users/${userId}`);
         if (!response.ok) {
           setError({ message: "Error while fetching the user" });
           return;

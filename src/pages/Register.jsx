@@ -1,11 +1,9 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ApiContext } from "../context/ApiContext";
 import apiCall from "../api/apiCall";
 import { ErrorContext } from "../context/ErrorContext";
 
 export default function Login({ setUsername }) {
-  const api = useContext(ApiContext);
   const { error, setError } = useContext(ErrorContext);
 
   const [registerUsername, setRegisterUsername] = useState("");
@@ -16,7 +14,7 @@ export default function Login({ setUsername }) {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const response = await apiCall(`${api}/users`, "POST", {
+      const response = await apiCall(`users`, "POST", {
         username: registerUsername,
         password: registerPassword,
         confirmPassword: confirmRegisterPassword,

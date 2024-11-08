@@ -15,7 +15,6 @@ import Error from "./pages/Error";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import "./assets/styles/output.css";
-import { ApiContext } from "./context/ApiContext";
 import { ErrorProvider } from "./context/ErrorContext";
 
 export default function App() {
@@ -42,10 +41,8 @@ export default function App() {
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <ApiContext.Provider value={import.meta.env.VITE_API_URL}>
-      <ErrorProvider>
-        <App />
-      </ErrorProvider>
-    </ApiContext.Provider>
+    <ErrorProvider>
+      <App />
+    </ErrorProvider>
   </StrictMode>
 );

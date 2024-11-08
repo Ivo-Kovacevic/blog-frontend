@@ -1,6 +1,5 @@
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { ApiContext } from "../context/ApiContext";
 import { ErrorContext } from "../context/ErrorContext";
 import PropTypes from "prop-types";
 import apiCall from "../api/apiCall";
@@ -8,7 +7,6 @@ import CommentsSkeleton from "./CommentsSkeleton";
 import Error from "./Error";
 
 export default function Comments({ resource, resourceId }) {
-  const api = useContext(ApiContext);
   const { error, setError } = useContext(ErrorContext);
 
   const [comments, setComments] = useState([]);
@@ -42,7 +40,7 @@ export default function Comments({ resource, resourceId }) {
     const fetchComments = async () => {
       try {
         const response = await apiCall(
-          `${api}/${resource}/${resourceId}/comments?page=${page}&limit=5`,
+          `${resource}/${resourceId}/comments?page=${page}&limit=5`,
           "GET"
         );
         if (!response.ok) {
@@ -73,7 +71,7 @@ export default function Comments({ resource, resourceId }) {
   const postComment = async (e) => {
     e.preventDefault();
     try {
-      const response = await apiCall(`${api}/${resource}/${resourceId}/comments`, "POST", {
+      const response = await apiCall(`${resource}/${resourceId}/comments`, "POST", {
         text: comment,
       });
       if (!response.ok) {
@@ -94,7 +92,7 @@ export default function Comments({ resource, resourceId }) {
   const deleteComment = async (commentId) => {
     try {
       const response = await apiCall(
-        `${api}/${resource}/${resourceId}/comments/${commentId}`,
+        `${resource}/${resourceId}/comments/${commentId}`,
         "DELETE"
       );
       if (!response.ok) {
@@ -120,7 +118,7 @@ export default function Comments({ resource, resourceId }) {
     e.preventDefault();
     try {
       const response = await apiCall(
-        `${api}/${resource}/${resourceId}/comments/${commentId}`,
+        `${resource}/${resourceId}/comments/${commentId}`,
         "PUT",
         {
           text: editedText,

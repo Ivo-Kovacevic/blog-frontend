@@ -1,15 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ApiContext } from "../../context/ApiContext";
 import { ErrorContext } from "../../context/ErrorContext";
 import apiCall from "../../api/apiCall";
 import Comments from "../../components/Comments";
 import PostSkeleton from "./PostSkeleton";
-import CommentsSkeleton from "../../components/CommentsSkeleton";
-import Error from "../../components/Error";
 
 export default function Post() {
-  const api = useContext(ApiContext);
   const { error, setError } = useContext(ErrorContext);
 
   const [post, setPost] = useState(null);
@@ -25,7 +21,7 @@ export default function Post() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await apiCall(`${api}/posts/${postId}`);
+        const response = await apiCall(`posts/${postId}`);
         if (!response.ok) {
           setError({ message: "Error while fetching the post" });
           return;

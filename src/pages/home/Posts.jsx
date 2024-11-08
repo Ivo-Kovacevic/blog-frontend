@@ -1,13 +1,11 @@
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { ApiContext } from "../../context/ApiContext";
 import { ErrorContext } from "../../context/ErrorContext";
 import PostsSkeleton from "./PostsSkeleton";
 import Error from "../../components/Error";
 import apiCall from "../../api/apiCall";
 
 export default function Posts() {
-  const api = useContext(ApiContext);
   const { error, setError } = useContext(ErrorContext);
 
   const [posts, setPosts] = useState([]);
@@ -34,7 +32,7 @@ export default function Posts() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await apiCall(`${api}/posts?page=${page}&limit=10`);
+        const response = await apiCall(`posts?page=${page}&limit=10`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
