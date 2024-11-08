@@ -42,10 +42,10 @@ export default function App() {
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <PostsProvider>
-      <ErrorProvider>
+    <ErrorProvider>
+      <PostsProvider>
         <App />
-      </ErrorProvider>
-    </PostsProvider>
+      </PostsProvider>
+    </ErrorProvider>
   </StrictMode>
 );

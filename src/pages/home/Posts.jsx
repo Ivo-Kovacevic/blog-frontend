@@ -2,17 +2,11 @@ import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ErrorContext } from "../../context/ErrorContext";
 import PostsSkeleton from "./PostsSkeleton";
-import Error from "../../components/Error";
-import apiCall from "../../api/apiCall";
 import { PostsContext } from "../../context/PostsContext";
 
 export default function Posts() {
   const { error, setError } = useContext(ErrorContext);
-  const { posts, setPosts } = useContext(PostsContext);
-
-  const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
+  const { posts, setPage, loading, setLoading, hasMore } = useContext(PostsContext);
 
   const observer = useRef();
   const lastPostElement = useCallback(
@@ -29,34 +23,6 @@ export default function Posts() {
     },
     [loading, hasMore]
   );
-
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const response = await apiCall(`posts?page=${page}&limit=10`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const { posts, hasMore } = await response.json();
-        setPosts((prevPosts) => {
-          const existingPostsIds = new Set(prevPosts.map((post) => post.id));
-          const uniquePosts = posts
-            .filter((post) => !existingPostsIds.has(post.id))
-            .map((post) => ({
-              ...post,
-              createdAt: new Date(post.createdAt),
-            }));
-          return [...prevPosts, ...uniquePosts];
-        });
-        setHasMore(hasMore);
-      } catch (error) {
-        setError(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchPosts();
-  }, [page]);
 
   return (
     <>
