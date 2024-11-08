@@ -4,11 +4,12 @@ import { ErrorContext } from "../../context/ErrorContext";
 import PostsSkeleton from "./PostsSkeleton";
 import Error from "../../components/Error";
 import apiCall from "../../api/apiCall";
+import { PostsContext } from "../../context/PostsContext";
 
 export default function Posts() {
   const { error, setError } = useContext(ErrorContext);
+  const { posts, setPosts } = useContext(PostsContext);
 
-  const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -54,7 +55,6 @@ export default function Posts() {
         setLoading(false);
       }
     };
-
     fetchPosts();
   }, [page]);
 

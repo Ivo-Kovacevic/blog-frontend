@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { PostsContext } from "../../context/PostsContext";
 import { ErrorContext } from "../../context/ErrorContext";
 import apiCall from "../../api/apiCall";
 import Comments from "../../components/Comments";
@@ -7,6 +8,7 @@ import PostSkeleton from "./PostSkeleton";
 
 export default function Post() {
   const { error, setError } = useContext(ErrorContext);
+  const { posts, setPosts } = useContext(PostsContext);
 
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -37,7 +39,18 @@ export default function Post() {
         setLoading(false);
       }
     };
-    fetchPost();
+
+    // Check if post is stored in posts array then get it from there, else fetch it from api
+    const foundPost = posts.find((post) => post.id === parseInt(postId));
+    if (foundPost) {
+      setPost({
+        ...foundPost,
+        createdAt: new Date(foundPost.createdAt),
+      });
+      setLoading(false);
+    } else {
+      fetchPost();
+    }
   }, []);
 
   const renderText = (content) => {

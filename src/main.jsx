@@ -16,6 +16,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import "./assets/styles/output.css";
 import { ErrorProvider } from "./context/ErrorContext";
+import { PostsProvider } from "./context/PostsContext";
 
 export default function App() {
   const [username, setUsername] = useState(localStorage.getItem("username") || "");
@@ -41,8 +42,10 @@ export default function App() {
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <ErrorProvider>
-      <App />
-    </ErrorProvider>
+    <PostsProvider>
+      <ErrorProvider>
+        <App />
+      </ErrorProvider>
+    </PostsProvider>
   </StrictMode>
 );
