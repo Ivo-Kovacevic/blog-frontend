@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useErrorContext } from "../context/ErrorContext";
 import apiCall from "../api/apiCall";
 import { useUserContext } from "../context/UserContext";
@@ -113,9 +113,9 @@ export default function Login() {
               Register
             </button>
 
-            <a href="/login" className="hover:underline">
+            <Link to="/login" className="hover:underline">
               Already have an account? Log in
-            </a>
+            </Link>
           </form>
         </div>
       </div>

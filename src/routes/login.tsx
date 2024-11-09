@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useErrorContext } from "../context/ErrorContext";
 import apiCall from "../api/apiCall";
 import { useUserContext } from "../context/UserContext";
@@ -85,9 +85,9 @@ function Login() {
               Log in
             </button>
 
-            <a href="/register" className="hover:underline">
+            <Link to="/register" className="hover:underline">
               Don't have an account? Register
-            </a>
+            </Link>
           </form>
         </div>
       </div>
