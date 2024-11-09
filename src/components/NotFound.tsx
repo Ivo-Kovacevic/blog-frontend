@@ -1,4 +1,4 @@
-export default function ErrorPage() {
+export default function NotFound() {
   return (
     <>
       <div className="h-screen w-screen flex flex-col justify-center items-center">

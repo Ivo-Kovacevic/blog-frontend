@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useErrorContext } from "../../context/ErrorContext.js";
 import apiCall from "../../api/apiCall.js";
@@ -11,7 +11,7 @@ export const Route = createFileRoute("/user/$userId")({
 });
 
 function User() {
-  const { error, setError } = useErrorContext();
+  const { setError } = useErrorContext();
 
   const [user, setUser] = useState<UserType | null>(null);
   const [loading, setLoading] = useState(true);

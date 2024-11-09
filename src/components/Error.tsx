@@ -28,8 +28,8 @@ export default function Error() {
         }`}
       >
         {/* Error will be array only when trying to register and failing. This way each error appears below each other. */}
-        {Array.isArray(errorMessage)
-          ? errorMessage.map((message, index) => <p key={index}>{message}</p>)
+        {Array.isArray(error?.messages)
+          ? error.messages.map((message, index) => <p key={index}>{message}</p>)
           : errorMessage}
       </div>
     </>

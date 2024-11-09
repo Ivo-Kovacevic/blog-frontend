@@ -1,8 +1,9 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "./assets/styles/output.css";
 import { routeTree } from "./routeTree.gen.js";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
+import NotFound from "./components/NotFound";
+import "./assets/styles/output.css";
 
 declare module "@tanstack/react-router" {
   interface Register {
@@ -10,16 +11,10 @@ declare module "@tanstack/react-router" {
   }
 }
 
-const router = createRouter({
-  routeTree,
-});
-
-export default function App() {
-  return <RouterProvider router={router} />;
-}
+const router = createRouter({ routeTree, defaultNotFoundComponent: NotFound });
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <App />
+    <RouterProvider router={router} />
   </StrictMode>
 );
