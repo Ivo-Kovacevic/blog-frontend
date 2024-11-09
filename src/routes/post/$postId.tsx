@@ -78,7 +78,7 @@ function Post() {
                 <h3 className="text-gray-600">
                   By{" "}
                   <Link
-                    to={`/user/${post.author.id}`}
+                    to={`/user/${post.authorId}`}
                     className="font-bold text-gray-900 hover:underline"
                   >
                     {post.author.username}
