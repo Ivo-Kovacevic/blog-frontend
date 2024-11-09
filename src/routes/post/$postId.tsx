@@ -1,15 +1,15 @@
-import { useEffect, useState } from 'react'
-import { createFileRoute, Link } from '@tanstack/react-router'
-import Comments from '../../components/Comments';
-import PostSkeleton from '../../components/post/PostSkeleton';
-import { PostType } from '../../@types/response';
-import { useErrorContext } from '../../context/ErrorContext';
-import { usePostsContext } from '../../context/PostsContext';
-import apiCall from '../../api/apiCall';
+import { useEffect, useState } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import Comments from "../../components/Comments";
+import PostSkeleton from "../../components/post/PostSkeleton";
+import { PostType } from "../../@types/response";
+import { useErrorContext } from "../../context/ErrorContext";
+import { usePostsContext } from "../../context/PostsContext";
+import apiCall from "../../api/apiCall";
 
-export const Route = createFileRoute('/post/$postId')({
+export const Route = createFileRoute("/post/$postId")({
   component: Post,
-})
+});
 
 function Post() {
   const { setError } = useErrorContext();
@@ -32,10 +32,10 @@ function Post() {
           setError({ message: "Error while fetching the post" });
           return;
         }
-        const { post }: { post: PostType } = await response.json();
+        const data: { post: PostType } = await response.json();
         setPost({
-          ...post,
-          createdAt: new Date(post.createdAt),
+          ...data.post,
+          createdAt: new Date(data.post.createdAt),
         });
       } catch (error) {
         error instanceof Error ? setError(error) : setError({ message: "An error occurred" });
@@ -45,16 +45,16 @@ function Post() {
     };
 
     // Check if post is stored in posts array then get it from there, else fetch it from api
-      const foundPost = posts.find((post) => post.id === parseInt(postId ?? "0"));
-      if (foundPost) {
-        setPost({
-          ...foundPost,
-          createdAt: new Date(foundPost.createdAt),
-        });
-        setLoading(false);
-      } else {
-        fetchPost();
-      }
+    const foundPost = posts.find((post) => post.id === parseInt(postId ?? "0"));
+    if (foundPost) {
+      setPost({
+        ...foundPost,
+        createdAt: new Date(foundPost.createdAt),
+      });
+      setLoading(false);
+    } else {
+      fetchPost();
+    }
   }, []);
 
   const renderText = (text: string) => {
@@ -84,9 +84,7 @@ function Post() {
                     {post.author.username}
                   </Link>
                 </h3>
-                <p>
-                  {post.createdAt.toLocaleString("en-DE")}
-                </p>
+                <p>{post.createdAt.toLocaleString("en-DE")}</p>
               </div>
               <hr className="border-2 border-black" />
               <div className="my-8">{renderText(post.text)}</div>

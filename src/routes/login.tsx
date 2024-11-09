@@ -3,6 +3,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useErrorContext } from "../context/ErrorContext";
 import apiCall from "../api/apiCall";
 import { useUserContext } from "../context/UserContext";
+import { LoginType } from "../@types/response";
 
 export const Route = createFileRoute("/login")({
   component: Login,
@@ -27,11 +28,11 @@ function Login() {
         setError({ message: "Invalid username or password" });
         return;
       }
-      const data = await response.json();
+      const data: LoginType = await response.json();
       const userId = data.userId;
       const name = data.username;
       const token = data.token;
-      localStorage.setItem("userId", userId);
+      localStorage.setItem("userId", userId.toString());
       localStorage.setItem("username", name);
       localStorage.setItem("jwt", token);
       setUsername(loginUsername);

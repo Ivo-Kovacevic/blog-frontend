@@ -31,3 +31,9 @@ export type CommentType = {
   text: string;
   createdAt: Date;
 };
+
+export type LoginType = {
+  userId: number;
+  username: string;
+  token: string;
+}

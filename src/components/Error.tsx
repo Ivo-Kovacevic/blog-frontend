@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useErrorContext } from "../context/ErrorContext";
 
 export default function Error() {
@@ -6,12 +6,15 @@ export default function Error() {
 
   const [errorMessage, setErrorMessage] = useState("");
   const [show, setShow] = useState(false);
+  const timeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (error) {
       setErrorMessage(error.message);
       setShow(true);
-      setTimeout(() => {
+
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      timeoutRef.current = setTimeout(() => {
         setError(null);
       }, 5000);
     } else {

@@ -29,8 +29,8 @@ function User() {
           setError({ message: "Error while fetching the user" });
           return;
         }
-        const user = await response.json();
-        setUser(user);
+        const data: UserType = await response.json();
+        setUser(data);
       } catch (error) {
         error instanceof Error ? setError(error) : setError({ message: "An error occurred" });
       } finally {

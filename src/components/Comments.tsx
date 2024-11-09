@@ -86,7 +86,7 @@ export default function Comments({ resource, resourceId }: Comments) {
         setError({ message: "You must be logged in to comment" });
         return;
       }
-      const data = await response.json();
+      const data: { comment: CommentType } = await response.json();
       setComments((prevComments) => [
         { ...data.comment, createdAt: new Date(data.comment.createdAt) },
         ...prevComments,
@@ -133,7 +133,7 @@ export default function Comments({ resource, resourceId }: Comments) {
         setError({ message: "You must be logged in to edit comment" });
         return;
       }
-      const data = await response.json();
+      const data: { comment: CommentType } = await response.json();
       setComments((prevComments) =>
         prevComments.map((comment) =>
           comment.id === commentId ? { ...comment, text: data.comment.text } : comment
